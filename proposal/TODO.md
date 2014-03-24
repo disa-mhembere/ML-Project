@@ -13,3 +13,4 @@ KL
 - Milestones
 - Bib - ML part
 - Methods - ML part
+- Resources
