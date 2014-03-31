@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 # email_parser.py
-# Created by Disa Mhembere on 2014-03-30.
-# Email: disa@jhu.edu
+# Created on 2014-03-30.
+# Email: disa@jhu.edu | lillaney@jhu.edu
 # Copyright (c) 2014. All rights reserved.
 """
 Example:
