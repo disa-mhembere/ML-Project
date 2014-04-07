@@ -5,6 +5,8 @@
 # Email: disa@jhu.edu, lillaney@jhu.edu
 # Copyright (c) 2014. All rights reserved.
 import numpy as np
+import cPickle
+from os import remove
 
 class tsfv(object):
   
@@ -45,6 +47,17 @@ class tsfv(object):
         s += "id: %d ==> Counts: %s\n" % (person_id, str(self.data[week][person_id]))
     return s
 
+  def save(self, output_filename):
+    f = open(output_filename, "wb")
+    cPickle.dump(self, f, protocol=2)
+    f.close()
+
+def load(filename):
+  f = open(filename, "rb")
+  p = cPickle.load(f)
+  f.close()
+  return p
+
 def mini_test():
   tsfv_obj = tsfv(5, 10)
   tsfv_obj.insert(1, np.array([1, 32, 5, 3, 5]), 1)
@@ -52,6 +65,17 @@ def mini_test():
   tsfv_obj.insert(3, np.array([1, 32, 5, 3, 5]), 4)
 
   print tsfv_obj
+  fn =  "rando.cPickle"
+
+  print "Saving %s ..." % fn
+  tsfv_obj.save(fn)
+  
+  print "Loading %s ..." % fn
+  t = load(fn)
+  print tsfv_obj
+
+  print "Cleaning %s ..." % fn
+  remove(fn)
 
 if __name__ == "__main__":
   mini_test()

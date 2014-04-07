@@ -7,18 +7,42 @@
 
 import argparse
 
-def get_dict(fn):
-  """"
-  Get the email addresses associated with individuals from employees who 
-  were included in the Enron graphs
-  """
-  f = open(fn, "rb")
-  lines = f.read().splitlines()
-  people_dict = {}
+class People(object):
 
-  for idx, line in enumerate(lines):
-    people_dict[idx+1] = line.split("\t")[0]+"@enron.com" # TODO: Verify this is ok
-  return people_dict
+  def __init__(self, fn):
+    self.names = self.get_dict(fn)
+    self.max_id = len(self.names)
+
+  def get_id(self, email):
+    """
+    Get a person's ID given their email address
+    If none exists create one and assign ID chronologically
+
+    @param email: the eamil address requires
+    """
+    _id = self.names.get(email)
+    if _id: return _id
+    else: return self._gen_id(email)
+  
+  def _gen_id(self, email):
+    """
+    Generate a new ID given an email address
+    """
+    self.max_id += 1
+    self.names[email] = self.max_id
+
+  def get_dict(self, fn):
+    """"
+    Get the email addresses associated with individuals from employees who 
+    were included in the Enron graphs
+    """
+    f = open(fn, "rb")
+    lines = f.read().splitlines()
+    people_dict = {}
+
+    for idx, line in enumerate(lines):
+      people_dict[idx+1] = line.split("\t")[0]+"@enron.com" # TODO: Verify this is ok
+    return people_dict
 
 def main():
   parser = argparse.ArgumentParser(description="Get the id of a person and \
@@ -28,7 +52,12 @@ def main():
 
   result = parser.parse_args()
   
-  print get_dict(result.name_file)
+  peeps = People(result.name_file)
+  peeps.get_id("disa@rando.com")
+
+  print peeps.names
+  print peeps.get_id("disa@rando.com")
+  print peeps.names
 
 if __name__ == "__main__":
   main()
