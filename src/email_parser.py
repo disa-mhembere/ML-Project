@@ -25,53 +25,53 @@ Example:
 'X-FileName']
 """
 import email
+import email.utils
+import time
 import pdb
+import datetime
 
 def get_date( msg ):
   """ Extracts date from the email and returns a String """
-  return msg.get("Date")
+  return datetime.datetime.fromtimestamp ( time.mktime( email.utils.parsedate( msg.get("Date") ) ) )
 
-def during_business():
-  """ Return bool"""
-  pass
+def get_week( msg ):
+  """ Extracts week from the date and returns an Integer """
+  return get_date(msg).isocalendar()[:2]
+
+def during_business( msg ):
+  """ Returns an Integer. 1 if during business and 0 if not"""
+  return 1 if 8 < get_date( msg ).hour < 19 else 0
+
+def on_weekday( msg ):
+  """ Returns an Integer. 1 if on a weekday and 0 if not. """
+  return 1 if get_date( msg ).isoweekday()<6 else 0
 
 def get_from( msg ):
   """ Extracts the "from" from the email as a String """
   return msg.get('From')
 
-# I am yet to strip the string here of /r/n/t
 def get_to( msg ):
   """ Extracts the "to" from the email as a String """
-  return msg.get('To')
+  return [i.strip() for i in msg.get('To').split(',')]
 
-# Same as above
 def get_cc( msg ):
   """ Extracts the "cc" from the email as List of Strings """
-  return msg.get('Cc')
+  return [i.strip() for i in msg.get('Cc').split(',')] if msg.has_key('Cc') else None
 
-# Same problem
-def get_bcc( msg ):
+def ge_bcc( msg ):
   """ Extracts the "bcc" from the email as a List of Strings """
-  return msg.get('Bcc')
+  return [i.strip() for i in msg.get('Bcc').split(',')] if msg.has_key('Bcc') else None
 
-# This does not return the length of the attachment becuase our data does not have an attachment
+# This does not return the length of the attachment because our data does not have an attachment
 def get_email_length( msg ):
   """ Extracts the email payload and returns the length of the payload """
   return len(msg.get_payload())
 
 # I assume that this is to check the email contains an attachement or not
-# But this does not work and I am trying to think of another way to figure that there is an attachment.
+# But this does not work and I am trying to think of another way to figure that if there is an attachment.
 def get_in_( msg ):
   """ Retuns a true if there is an attachement and a false if there is none """
   return ( msg.has_key('X-FileName') )
-
-# I think this becomes defunct given the disucssion we had.
-def get_entry( msg ):
-  """ Returns an entry of type <something> """
-  
-  pdb.set_trace()
-  print get_from(msg)
-
 
 def main():
   """ Test Function for this file. Grabs a random file and passes the contents to get_entry for test """
@@ -79,8 +79,8 @@ def main():
   # I am testing for two diffrent files here. Once which contains an attachment and the other does not.
   test1 = open("/home/klillan1/work/machine_learning/data/enron_mail_20110402/maildir/kean-s/transco/1.",'r')
   test2 = open("/home/klillan1/work/machine_learning/data/enron_mail_20110402/maildir/kitchen-l/inbox/50.", 'r')
-  msg = email.message_from_file(test1)
-  get_entry( msg )
+  msg = email.message_from_file(test2)
+  pdb.set_trace()
 
 if __name__ == "__main__":
   main()
