@@ -30,6 +30,18 @@ import time
 import pdb
 import datetime
 
+def count_in( tempList ):
+  """ Count the number of in network emails """
+  count = 0
+  for x in tempList:
+    if '@enron.com' in x:
+      count+=1
+  return count
+
+def count_out( tempList ):
+  """ Count the number of out network emails  """
+  return None
+
 def get_date( msg ):
   """ Extracts date from the email and returns a String """
   return datetime.datetime.fromtimestamp ( time.mktime( email.utils.parsedate( msg.get("Date") ) ) )
@@ -52,15 +64,26 @@ def get_from( msg ):
 
 def get_to( msg ):
   """ Extracts the "to" from the email as a String """
-  return [i.strip() for i in msg.get('To').split(',')]
+  toList =  [i.strip() for i in msg.get('To').split(',')]
+  count = count_in(toList)
+  return ( toList, count, len(toList) - count )
 
 def get_cc( msg ):
   """ Extracts the "cc" from the email as List of Strings """
-  return [i.strip() for i in msg.get('Cc').split(',')] if msg.has_key('Cc') else None
-
-def ge_bcc( msg ):
+  if msg.has_key('Cc'):
+    toList = [i.strip() for i in msg.get('Cc').split(',')]
+    count = count_in(toList)
+    return ( toList, count, len(toList) - count)
+  else:
+    return ( [ ], 0, 0)
+def get_bcc( msg ):
   """ Extracts the "bcc" from the email as a List of Strings """
-  return [i.strip() for i in msg.get('Bcc').split(',')] if msg.has_key('Bcc') else None
+  if msg.has_key('Bcc'):
+    toList = [i.strip() for i in msg.get('Bcc').split(',')]
+    count = count_in(toList)
+    return (toList, count, len(toList)-count)
+  else: 
+    return ([ ], 0, 0)
 
 # This does not return the length of the attachment because our data does not have an attachment
 def get_email_length( msg ):
@@ -71,7 +94,7 @@ def get_email_length( msg ):
 # But this does not work and I am trying to think of another way to figure that if there is an attachment.
 def get_in_( msg ):
   """ Retuns a true if there is an attachement and a false if there is none """
-  return ( msg.has_key('X-FileName') )
+  return 0 if msg.has_key('X-FileName') else 0
 
 def main():
   """ Test Function for this file. Grabs a random file and passes the contents to get_entry for test """
