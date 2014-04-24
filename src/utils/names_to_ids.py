@@ -30,6 +30,7 @@ class People(object):
     """
     self.max_id += 1
     self.names[email] = self.max_id
+    return self.max_id
 
   def get_dict(self, fn):
     """"
@@ -41,7 +42,8 @@ class People(object):
     people_dict = {}
 
     for idx, line in enumerate(lines):
-      people_dict[idx+1] = line.split("\t")[0]+"@enron.com" # TODO: Verify this is ok
+      people_dict[line.split("\t")[0]+"@enron.com"] = idx+1 # NOTE: 1-based indexing
+
     return people_dict
 
 def main():
