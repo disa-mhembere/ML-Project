@@ -4,32 +4,13 @@
 # Created on 2014-03-30.
 # Email: disa@jhu.edu | lillaney@jhu.edu
 # Copyright (c) 2014. All rights reserved.
-"""
-Example:
-['Message-ID',
-'Date',
-'From',
-'To',
-'Subject',
-'Cc',
-'Mime-Version',
-'Content-Type',
-'Content-Transfer-Encoding',
-'Bcc',
-'X-From',
-'X-To',
-'X-cc',
-'X-bcc',
-'X-Folder',
-'X-Origin',
-'X-FileName']
-"""
+
 import email
 import email.utils
 import time
 import pdb
 import datetime
-
+from math import log
 def count_in( tempList ):
   """ Count the number of in network emails """
   count = 0
@@ -64,6 +45,8 @@ def get_from( msg ):
 
 def get_to( msg ):
   """ Extracts the "to" from the email as a String """
+  if not msg['to']: return ( [ ], 0, 0 )
+
   toList =  [i.strip() for i in msg.get('To').split(',')]
   count = count_in(toList)
   return ( toList, count, len(toList) - count )
@@ -88,13 +71,16 @@ def get_bcc( msg ):
 # This does not return the length of the attachment because our data does not have an attachment
 def get_email_length( msg ):
   """ Extracts the email payload and returns the length of the payload """
-  return len(msg.get_payload())
+  return log(len(msg.get_payload()))
 
 # I assume that this is to check the email contains an attachement or not
 # But this does not work and I am trying to think of another way to figure that if there is an attachment.
 def get_in_( msg ):
   """ Retuns a true if there is an attachement and a false if there is none """
   return 0 if msg.has_key('X-FileName') else 0
+
+def has_attachment( msg ):
+  return 0 # FIXME: STUB
 
 def main():
   """ Test Function for this file. Grabs a random file and passes the contents to get_entry for test """
