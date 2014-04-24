@@ -6,10 +6,13 @@
 # Copyright (c) 2014. All rights reserved.
 
 import operator
+import cPickle
 import pdb
 
-def write_file( tsfv ):
+def write_file( tsfvName ):
   """ Writes a TSFV to a file. """
+  fs = open(tsfvName,'r')
+  tsfv = cPickle.load(fs)
   filename = open('test','wb')
 
   for i in sorted( tsfv.iteritems(), key=operator.itemgetter(0) ):
