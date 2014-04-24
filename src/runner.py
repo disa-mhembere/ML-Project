@@ -73,14 +73,16 @@ def run(data_dir, names_fn, save_fn, inv_dir=None):
             tsfv_obj.update_cc(week, people.get_id(recepient), is_in_network)
 
           for recepient in cc:
+            is_in_network = recepient.split("@")[-1] == sender_domain
             tsfv_obj.update_cc(week, people.get_id(recepient), is_in_network)
 
           for recepient in bcc:
+            is_in_network = recepient.split("@")[-1] == sender_domain
             tsfv_obj.update_bcc(week, people.get_id(recepient), is_in_network)
   
   # Add the invariants. 
   # NOTE: Weeks must be named 0 - NUM_WEEKS
-  # Arr
+  # arr_fn: Is in usernames 
   if inv_dir:
     for week in glob(os.path.join(inv_dir, "*")):
       for arr_fn in glob(os.path.join(week,"*")): # NOTE: arr_fn is the user_id
