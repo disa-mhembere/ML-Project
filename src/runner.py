@@ -28,7 +28,7 @@ from structs.time_series_fv import tsfv
 from utils.names_to_ids import People
 from glob import glob
 
-def run(data_dir, names_fn, save_fn):
+def run(data_dir, names_fn, save_fn, inv_dir=None):
   """ 
   Given a directory of emails lets get all features and build a 
   data structures with these features and graph statistics.
@@ -38,7 +38,7 @@ def run(data_dir, names_fn, save_fn):
   @param save_fn: the file name to save pickle dump after
   """
   people = People(names_fn)
-  NUM_FEATURES = 20
+  NUM_FEATURES = 19
 
   tsfv_obj = tsfv(NUM_FEATURES)
 
@@ -53,23 +53,41 @@ def run(data_dir, names_fn, save_fn):
         # This is a single email
         week = get_week(entry) # 2-tuple
         to, to_email_in, to_email_outn = get_to(entry) # list of people whom this is sent to 
-        cc, cc_to_email_in, cc_to_email_outn = get_cc(entry) # list of people who are cc'd
-        bcc, bcc_to_email_in, bcc_to_email_outn = get_bcc(entry) # bcc'd
-        _id = people.get_id(get_from(entry))
-        weekday = on_weekday(entry)
-        
-        # Update for a single mail
-        tsfv_obj.insert_email(week, _id, to_email_in, to_email_outn, cc_to_email_in, 
-            cc_to_email_outn, bcc_to_email_in, bcc_to_email_outn, during_business(entry), 
-            weekday, get_email_length(entry), has_attachment(entry))
-        
-        # Update cc-ers
-        for recepient in to:
-          tsfv_obj.update_cc(week, recepient_id=people.get_id(recepient), sender_id=_id)
 
-        for recepient in cc:
-          tsfv_obj.update_bcc(week, recepient_id=people.get_id(recepient), sender_id=_id)
-        
+        if (to):
+          cc, cc_to_email_in, cc_to_email_outn = get_cc(entry) # list of people who are cc'd
+          bcc, bcc_to_email_in, bcc_to_email_outn = get_bcc(entry) # bcc'd
+          _from = get_from(entry)
+          _id = people.get_id(_from)
+          weekday = on_weekday(entry)
+          
+          # Update for a single mail
+          tsfv_obj.insert_email(week, _id, to_email_in, to_email_outn, cc_to_email_in, 
+              cc_to_email_outn, bcc_to_email_in, bcc_to_email_outn, during_business(entry), 
+              weekday, get_email_length(entry), has_attachment(entry))
+          
+          sender_domain = _from.split("@")[-1]
+          # Update cc-ers
+          for recepient in to:
+            is_in_network = recepient.split("@")[-1] == sender_domain
+            tsfv_obj.update_cc(week, people.get_id(recepient), is_in_network)
+
+          for recepient in cc:
+            tsfv_obj.update_cc(week, people.get_id(recepient), is_in_network)
+
+          for recepient in bcc:
+            tsfv_obj.update_bcc(week, people.get_id(recepient), is_in_network)
+  
+  # Add the invariants. 
+  # NOTE: Weeks must be named 0 - NUM_WEEKS
+  # Arr
+  if inv_dir:
+    for week in glob(os.path.join(inv_dir, "*")):
+      for arr_fn in glob(os.path.join(week,"*")): # NOTE: arr_fn is the user_id
+        tsfv_obj.update_inv(int(os.path.basename(week)), int(os.path.basename(arr_fn)))
+
+  tsfv_obj.finish()
+  print tsfv_obj
   print "Mission complete!"
   tsfv_obj.save(save_fn)
 
@@ -79,8 +97,8 @@ def main():
   parser.add_argument("data_dir", action="store", help="The dir containing data")
   parser.add_argument("names_fn", action="store", help="The file with mapping from email \
       to name data")
-  parser.add_argument("-s", "--save_fn", action="store", default="tsfv.cPickle", \
-      help="The tsfv file name of the pickle dump")
+  parser.add_argument("-s", "--save_fn", action="store", default="tsfv.cPickle", help="Save filename")
+  parser.add_argument("-i", "--inv_dir", action="store", help="Directory with invariants")
 
   result = parser.parse_args()
   
