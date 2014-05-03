@@ -21,7 +21,7 @@ def get_r_list(fn):
   }
   """)
 
-  return np.array(func(fn), dtype=np.float32)
+  return (np.array(func(fn), dtype=np.float32)).real
 
 def test():
   print get_r_list("./test.Rbin")

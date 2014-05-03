@@ -13,8 +13,8 @@ from os import remove
 Feature vector order:
   [to_email_in,  from_email_in, cc_to_email_in, bcc_to_email_in, mean_email_len,
   to_email_outn,  from_email_outn, cc_to_email_outn, bcc_to_email_outn,
-  num_attachments, on_weekend, on_weekday, num_emails_dbh, num_emails_abh, degree,
-  scan1, triangle, transitivity, normed_eigenvalue
+  num_attachments, on_weekend, on_weekday, num_emails_dbh, num_emails_abh, indegree,
+  outdegree, scan1, triangle, transitivity, normed_eigenvalue
   ]
 """
 CC_INDEX_IN = 2
@@ -28,6 +28,8 @@ TO_INDEX_OUTN = 5
 
 EMAIL_LEN_INDEX = 4
 INV_INDEX_START = 15
+
+NUM_INVARIANTS = 6
 
 class tsfv(object):
   
@@ -73,8 +75,8 @@ class tsfv(object):
     self.verify(week, _id) # Wasteful!
     self.data[week][_id] += [ to_email_in, 0, cc_to_email_in, bcc_to_email_in, email_length,
         to_email_outn, 0, cc_to_email_outn, bcc_to_email_outn, attachment,
-        int(not weekday), weekday, during_business, int(not during_business), 0, 0, 0, 0, 0 
-        ]
+        int(not weekday), weekday, during_business, int(not during_business)
+        ] + [0]*NUM_INVARIANTS
 
   def update_to(self, week, recepient_id, is_in_network):
     self.verify(week, recepient_id) # Wasteful!

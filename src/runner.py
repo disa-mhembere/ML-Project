@@ -16,8 +16,8 @@ Key:
 Feature vector order:
   [to_email_in,  from_email_in, cc_to_email_in, bcc_to_email_in, mean_email_len_in, 
   to_email_outn,  from_email_outn, cc_to_email_outn, bcc_to_email_outn, mean_email_len_outn,
-  num_attachments, on_weekend, on_weekday, num_emails_dbh, num_emails_abh, degree, 
-  scan1, triangle, transitivity, normed_eigenvalue
+  num_attachments, on_weekend, on_weekday, num_emails_dbh, num_emails_abh, indegree, 
+  outdegree, scan1, triangle, transitivity, normed_eigenvalue
   ]
 """
 import argparse
@@ -38,7 +38,7 @@ def run(data_dir, names_fn, save_fn, inv_dir=None):
   @param save_fn: the file name to save pickle dump after
   """
   people = People(names_fn)
-  NUM_FEATURES = 19
+  NUM_FEATURES = 20
 
   tsfv_obj = tsfv(NUM_FEATURES)
 
