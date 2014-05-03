@@ -1,0 +1,35 @@
+Graph Information:
+
+November 1998 - April 2002. This gives us 189 weeks
+
+150 Enron Executives - 186 Email Addresses 
+
+517,431 email messages
+
+People found guilty
+
+Arthur Andersen
+Michael Kopper
+Andrew Fastow
+Lea Fastow
+Jeffrey Skilling
+Paula Rieker
+Ken Lay
+Richard Causey
+Ben F. Glisan Jr.
+Mark E. Koenig
+Kenneth D. Rice
+Nancy Temple
+Rebecca Mark
+Kevin Howard
+Michael Krautz
+Joseph Hirko
+Rex Shelby
+Scott Yeager
+Christopher Calger
+John Forney
+Kevin Hannon
+Timothy DeSpain
+David Delainey
+Timothy Belden
+
