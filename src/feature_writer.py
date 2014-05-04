@@ -23,7 +23,8 @@ def write_file( tsfvName, writeFile ):
       
       for idx, value in enumerate(j[1]):
        
-        filename.write( "{}:{} ".format( idx+1, str(value) ) )
+        if ( value!=0.0 ):
+          filename.write( "{}:{} ".format( idx+1, str(value) ) )
 
       filename.write('\n')
 
