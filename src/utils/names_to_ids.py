@@ -46,6 +46,15 @@ class People(object):
 
     return people_dict
 
+  def to_file(self, fn):
+    s = ""
+    for key in self.names.keys():
+      s += key + "\t" + str(self.names[key]) + "\n"
+
+    f = open(fn, "wb")
+    f.write(s)
+    f.close()
+
 def main():
   parser = argparse.ArgumentParser(description="Get the id of a person and \
       associate with id in enron graphs")
@@ -60,6 +69,8 @@ def main():
   print peeps.names
   print peeps.get_id("disa@rando.com")
   print peeps.names
+
+  peeps.to_file("testpeople.txt")
 
 if __name__ == "__main__":
   main()
