@@ -27,7 +27,7 @@ TO_INDEX_IN = 0
 TO_INDEX_OUTN = 5
 
 EMAIL_LEN_INDEX = 4
-INV_INDEX_START = 15
+INV_INDEX_START = 14
 
 NUM_INVARIANTS = 6
 
@@ -103,7 +103,7 @@ class tsfv(object):
     else:
       self.data[week][recepient_id][BCC_INDEX_OUTN] += 1
 
-  def _update_inv(self, week, _id, invariants):
+  def update_inv(self, week, _id, invariants):
     """
     Add the precomputed invariants 
     """

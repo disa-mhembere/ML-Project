@@ -9,6 +9,7 @@ require(igraph)
 parser <- ArgumentParser(description="Compute invariants on a dir")
 parser$add_argument("gfn", help="The directory with time series graphs")
 parser$add_argument("-o", "--outdir", default="data", help="Output directory")
+parser$add_argument("-l", "--lose.direction", action="store_true", help="Lose directionality after computing degree")
 
 result <- parser$parse_args()
 
@@ -21,6 +22,12 @@ for (file in list.files(result$gfn)) { # loop through tsgs
   
   in.deg <- degree(g, mode="in")
   out.deg <- degree(g, mode="out")
+
+  if (result$lose.direction) {
+    cat("Dropping directionality ..\n")
+    g <- as.undirected(g) # Undirect me
+  }
+
   ss1 <- local.scan(g)
   trans <- transitivity(g, "local")
   trans[is.nan(trans)] <- 0
@@ -56,3 +63,5 @@ for (file in list.files(result$gfn)) { # loop through tsgs
   }
   cat("\n") 
 }
+
+cat("Saved all invariants to: ", result$outdir, "!\n")
