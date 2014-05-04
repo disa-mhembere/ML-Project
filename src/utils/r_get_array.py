@@ -8,7 +8,7 @@
 import rpy2.robjects as robjects
 import numpy as np
 
-def get_r_list(fn):
+def get_r_array(fn):
   """
   Load an r list and return a numpy array
   
@@ -20,11 +20,13 @@ def get_r_list(fn):
   arr
   }
   """)
+  
+  arr = (np.array(list(func(fn)))).real # Has to be this way to avoid type errors
 
-  return (np.array(func(fn), dtype=np.float32)).real
+  return arr
 
 def test():
-  print get_r_list("./test.Rbin")
+  print get_r_array("./test.Rbin")
   print "If no error was thrown and an array printed all good ..."
 
 if __name__ == "__main__":
