@@ -16,6 +16,7 @@ def write_file( tsfvName, writeFile ):
   fs = open(tsfvName,'r')
   tsfv = cPickle.load(fs)
   filename = open(writeFile, 'wb')
+  flag = False
 
   for i in sorted( tsfv.data.iteritems(), key=operator.itemgetter(0) ):
     
@@ -24,9 +25,12 @@ def write_file( tsfvName, writeFile ):
       for idx, value in enumerate(j[1]):
        
         if ( value!=0.0 ):
+          flag = True
           filename.write( "{}:{} ".format( idx+1, str(value) ) )
 
-      filename.write('\n')
+      if ( flag ):
+        filename.write('\n')
+      flag = False
 
 def main():
 
