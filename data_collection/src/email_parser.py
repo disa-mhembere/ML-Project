@@ -38,12 +38,38 @@ def get_week( msg ):
   return get_date(msg).isocalendar()[:2]
 
 def during_business( msg ):
-  """ Returns an Integer. 1 if during business and 0 if not"""
-  return 1 if 8 < get_date( msg ).hour < 19 else 0
+  """ 
+  Returns an Integer. Count of emails sent during 
+  business hours by this email and -(minus) count if not
+  """
+
+  count = 0
+  _to = msg.get("to")
+  __cc = msg.get("cc")
+  __bcc = msg.get("bcc")
+
+  if _to: count += len(_to.split(","))
+  if _cc: count += len(_cc.split(","))
+  if _bcc: count += len(_bcc.split(","))
+
+  return count if 8 < get_date( msg ).hour < 19 else (-count)
 
 def on_weekday( msg ):
-  """ Returns an Integer. 1 if on a weekday and 0 if not. """
-  return 1 if get_date( msg ).isoweekday()<6 else 0
+  """ 
+  Returns an Integer. 
+  Count if on a weekday and -(minus) count if not. 
+  """
+
+  count = 0
+  _to = msg.get("to")
+  __cc = msg.get("cc")
+  __bcc = msg.get("bcc")
+
+  if _to: count += len(_to.split(","))
+  if _cc: count += len(_cc.split(","))
+  if _bcc: count += len(_bcc.split(","))
+
+  return count if get_date( msg ).isoweekday()<6 else (-count)
 
 def get_from( msg ):
   """ Extracts the "from" from the email as a String """
