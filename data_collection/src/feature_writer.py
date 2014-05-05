@@ -20,14 +20,14 @@ def write_file( tsfvName, writeFile ):
 
   # Setting the flag for inserting a newline to False
   flag = False
-
   # Iterating over the TSFV data structure
   for i in sorted( tsfv.data.iteritems(), key=operator.itemgetter(0) ):
     
     for j in i[1].iteritems():
       
       for idx, value in enumerate(j[1]):
-      
+     
+        print j[0]
         # Checking if the value is 0.0. This is for creating a sparse matrix
         if ( value!=0.0 ):
 
