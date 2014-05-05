@@ -78,7 +78,6 @@ def get_from( msg ):
 def get_to( msg ):
   """ Extracts the "to" from the email as a String """
   if not msg['to']: return ( [ ], 0, 0 )
-
   toList =  [i.strip() for i in msg.get('To').split(',')]
   count = count_in(toList, msg['From'])
   return ( toList, count, len(toList) - count )
@@ -91,6 +90,7 @@ def get_cc( msg ):
     return ( toList, count, len(toList) - count)
   else:
     return ( [ ], 0, 0)
+
 def get_bcc( msg ):
   """ Extracts the "bcc" from the email as a List of Strings """
   if msg.has_key('Bcc'):
