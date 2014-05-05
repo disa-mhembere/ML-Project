@@ -49,17 +49,17 @@ def run(data_dir, names_fn, save_fn, NUM_FEATURES):
   tsfv_obj = tsfv(NUM_FEATURES)
 
   for people_dir in glob(os.path.join(data_dir,"*")): # Names of employees
-    print "Processing employee ' %s' ..." % people_dir
+    print "Processing employee ' %s' ..." % os.path.basename(people_dir)
     
     emails = [] # all emails
     # accumulate all emails filenames
     for root, dirnames, filenames in os.walk(people_dir):
       for filename in filenames:
         full_fn = os.path.join(root, filename)
-        print "Processing file %s" % (full_fn)
         if os.path.isfile(full_fn) and (not os.path.basename(full_fn).startswith(".")): emails.append(full_fn)
 
     for email_fn in emails:
+      print "Processing file %s ..." % (email_fn)
       entry = email.message_from_file(open(email_fn))
       ingest_email(entry)
   
@@ -77,10 +77,11 @@ def ingest_email(entry):
   week = get_week(entry) # 2-tuple
   to, to_email_in, to_email_outn = get_to(entry) # list of people whom this is sent to 
 
-  if (to):
+  if to: # ignore auto-generated emails to the user
     cc, cc_to_email_in, cc_to_email_outn = get_cc(entry) # list of people who are cc'd
     bcc, bcc_to_email_in, bcc_to_email_outn = get_bcc(entry) # bcc'd
     _from = get_from(entry)
+
     _id = people.get_id(_from)
     weekday = on_weekday(entry)
     
@@ -90,10 +91,11 @@ def ingest_email(entry):
         weekday, get_email_length(entry), has_attachment(entry))
     
     sender_domain = _from.split("@")[-1]
-    # Update cc-ers
+
+    # Update to, cc, bcc
     for recepient in to:
       is_in_network = recepient.split("@")[-1] == sender_domain
-      tsfv_obj.update_cc(week, people.get_id(recepient), is_in_network)
+      tsfv_obj.update_to(week, people.get_id(recepient), is_in_network)
 
     for recepient in cc:
       is_in_network = recepient.split("@")[-1] == sender_domain
@@ -107,7 +109,7 @@ def ingest_email(entry):
 def main():
   parser = argparse.ArgumentParser(description="Extract data from emails and write \
       to file in data format")
-  parser.add_argument("data_dir", action="store", help="The dir containing data")
+  parser.add_argument("data_dir", action="store", help="The dir containing the email raw data")
   parser.add_argument("names_fn", action="store", help="The file with mapping from email \
       to name data")
   parser.add_argument("-s", "--save_fn", action="store", default="tsfv.cPickle", help="Save filename")

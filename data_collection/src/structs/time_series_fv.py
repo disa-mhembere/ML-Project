@@ -72,14 +72,15 @@ class tsfv(object):
      cc_to_email_outn, bcc_to_email_in, bcc_to_email_outn, during_business,
      weekday, email_length, attachment):
 
-    self.verify(week, _id) # Wasteful!
+    #if _id == 141: import pdb; pdb.set_trace()
+    self.verify(week, _id) 
     self.data[week][_id] += [ to_email_in, 0, cc_to_email_in, bcc_to_email_in, email_length,
         to_email_outn, 0, cc_to_email_outn, bcc_to_email_outn, attachment,
         int(not weekday), weekday, during_business, int(not during_business)
         ] + [0]*NUM_INVARIANTS
 
   def update_to(self, week, recepient_id, is_in_network):
-    self.verify(week, recepient_id) # Wasteful!
+    self.verify(week, recepient_id) 
 
     if is_in_network:
       self.data[week][recepient_id][TO_INDEX_IN] += 1
@@ -88,7 +89,7 @@ class tsfv(object):
 
 
   def update_cc(self, week, recepient_id, is_in_network):
-    self.verify(week, recepient_id) # Wasteful!
+    self.verify(week, recepient_id) 
 
     if is_in_network:
       self.data[week][recepient_id][CC_INDEX_IN] += 1
@@ -111,7 +112,7 @@ class tsfv(object):
 
     self.data[week][_id][INV_INDEX_START:] = invariants
 
-  def finish(self, ):
+  def finish(self):
     for week in self.data.keys():
       for _id in self.data[week].keys():
         sum_emails = self.data[week][_id][TO_INDEX_IN] +\
@@ -139,10 +140,16 @@ def load(filename):
   return p
 
 def mini_test():
-  tsfv_obj = tsfv(5)
-  tsfv_obj.insert(1, np.array([1, 32, 5, 3, 5]), 1)
-  tsfv_obj.insert(1, np.array([2, 2, 2, 2, 2]), 1)
-  tsfv_obj.insert(3, np.array([1, 32, 5, 3, 5]), 4)
+  tsfv_obj = tsfv(20)
+  #tsfv_obj.insert(1, np.array([1, 32, 5, 3, 5]), 1)
+  #tsfv_obj.insert(1, np.array([2, 2, 2, 2, 2]), 1)
+  #tsfv_obj.insert(3, np.array([1, 32, 5, 3, 5]), 4)
+
+  tsfv_obj.insert_email(week=1, _id=69, to_email_in=5, to_email_outn=10, cc_to_email_in=15, cc_to_email_outn=0, bcc_to_email_in=0, bcc_to_email_outn=0, during_business=1, weekday=1, email_length=1000, attachment=3)
+
+  tsfv_obj.insert_email(week=1, _id=69, to_email_in=10, to_email_outn=5, cc_to_email_in=0, cc_to_email_outn=15, bcc_to_email_in=15, bcc_to_email_outn=15, during_business=0, weekday=14, email_length=1000, attachment=12)
+
+  tsfv_obj.finish()
 
   print tsfv_obj
   fn =  "rando.cPickle"
