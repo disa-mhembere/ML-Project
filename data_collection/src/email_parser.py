@@ -11,6 +11,10 @@ import time
 import pdb
 import datetime
 from math import log
+from re import compile
+
+ATTACHMENT_PATT = compile("See attached file")
+
 def count_in( tempList ):
   """ Count the number of in network emails """
   count = 0
@@ -80,7 +84,7 @@ def get_in_( msg ):
   return 0 if msg.has_key('X-FileName') else 0
 
 def has_attachment( msg ):
-  return 0 # FIXME: STUB
+  return len(ATTACHMENT_PATT.findall(msg.get_payload()))
 
 def main():
   """ Test Function for this file. Grabs a random file and passes the contents to get_entry for test """
