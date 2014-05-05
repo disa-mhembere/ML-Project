@@ -11,11 +11,13 @@ import time
 import pdb
 import datetime
 from math import log
-def count_in( tempList ):
+def count_in( tempList, fromAddress ):
   """ Count the number of in network emails """
   count = 0
+  # Checking for sender and receiver domain to be the same
   for x in tempList:
-    if '@enron.com' in x:
+
+    if x.split('@')[1] == fromAddress.split('@')[1]:
       count+=1
   return count
 
@@ -48,7 +50,7 @@ def get_to( msg ):
   if not msg['to']: return ( [ ], 0, 0 )
 
   toList =  [i.strip() for i in msg.get('To').split(',')]
-  count = count_in(toList)
+  count = count_in(toList, msg['From'])
   return ( toList, count, len(toList) - count )
 
 def get_cc( msg ):
@@ -88,8 +90,9 @@ def main():
   # I am testing for two diffrent files here. Once which contains an attachment and the other does not.
   test1 = open("/home/klillan1/work/machine_learning/data/enron_mail_20110402/maildir/kean-s/transco/1.",'r')
   test2 = open("/home/klillan1/work/machine_learning/data/enron_mail_20110402/maildir/kitchen-l/inbox/50.", 'r')
-  msg = email.message_from_file(test2)
+  test3 = open('/home/klillan1/work/machine_learning/data/enron_mail_20110402/maildir/allen-p/discussion_threads/3.', 'r')
   pdb.set_trace()
+  msg = email.message_from_file(test1)
 
 if __name__ == "__main__":
   main()
