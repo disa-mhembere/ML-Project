@@ -1,0 +1,124 @@
+
+\documentclass[11pt,letterpaper]{article}
+\usepackage{naaclhlt2010}
+\usepackage{paralist}
+\usepackage{times}
+\usepackage{latexsym}
+\setlength\titlebox{6.5cm}    % Expanding the titlebox
+
+\title{Identifying Anomalous Activity the Enron Email \\
+				Corpus using Glocal Multivariate Graph Statistics}
+
+\author{Disa Mhembere\\
+  Department of Computer Science\\
+  Johns Hopkins University\\
+  {\tt dmhembe1@jhu.edu}
+  \And
+  Kunal Lillaney \\
+  Department of Computer Science\\
+  Johns Hopkins University\\
+  {\tt lillaney@jhu.edu}}
+
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Graphs are quickly emerging as a leading abstraction for the representation of data
+flow and interactions within networks. One high-interest area of study deals with 
+the use of graph theory to detect attacks and anomalous activity in networks 
+\cite{priebe2005scan,park2009anomaly,park2013anomaly}.
+Additionally, the use of machine learning to detect threats within networks 
+has become a topic of particular interest 
+\cite{mahoney2003machine,shon2005machine,sommer2010outside,shon2007hybrid} within
+cyber security and machine learning circles alike.
+
+The use of glocal multivariate graph statistics \cite{mhembere2013computing} as 
+a supplementary source of multi-dimensional features for anomalous network detection,
+has not been explored \textit{to our knowledge}. Such statistics can expose 
+otherwise-latent topological attributes within networks that have the potential 
+to improve anomalous activity detection within a network. 
+
+We use of such statistics to generate novel features for use within
+classification tasks for the Enron corpus of emails \cite{enronrepo2009}.
+We hope to show that the use of such statistics can help to identify periods of anomalous 
+activity and associated actors.
+
+\end{abstract}
+
+
+\section{Introduction}
+Graphs are an intuitive high-level abstraction of interaction in any setting where
+there is information flow are several participants in the exchange of it.
+
+\section{Background}
+Todo
+
+\section{Design}
+This section describes our choice of glocal graph statistics and discusses their suitability
+to the task of detection anomalous actors in the Enron email corpus.
+We further discus our choice of Machine Learning algorithms. Lastly, we discuss our metrics
+of success and evaluation for our implementations.
+
+\subsection{Graph Statistics}
+Todo
+
+\subsection{Machine Learning Machinery}
+Literature \cite{shon2007hybrid,shon2005machine} has 
+led us to believe that SVMs may be suitable from such a classification task. 
+We propose the use of a weighted kNN to identify malicious actors in the network 
+at different time points since we conjecture the features of malicious users will 
+have high relative `similarity'.
+
+
+\section{Methods}
+In this section we describe both data acquisition phase and the learning algorithm
+implementation and the challenges we faced in the pursuit of both.
+
+\subsection{Data Acquisition}
+To realize our goals we obtain raw data from two sources:
+\begin{inparaenum}[\itshape(i)]
+\item http://www.cs.cmu.edu/$\sim$./enron/. This resource contains over 0.5 million
+emails from senior management within Enron and 
+\item http://cis.jhu.edu/parky/Enron/enron.html. This is a resource from where we obtain
+time-series graphs of Enron email activity for a 189 week period between 1998 and 2002.
+Here each graph represents a week of email interaction between $\sim$150 to executives
+at Enron.
+\end{inparaenum}
+
+\subsubsection{Raw email Feature Extraction}
+
+\subsubsection{Challenges: Raw email Feature Extraction}
+We faced several
+
+- Several email addresses to a single user
+- Non-uniform email addresses generated in raw text
+- Auto-generated emails
+
+
+\subsubsection{Time Series Feature Extraction}
+Todo
+\subsubsection{Challenges: Feature Extraction}
+Todo
+\subsubsection{Regularization}
+Todo
+
+\section{Experiment Design}
+Todo
+\section{Results}
+Todo
+
+\section{Comparison to proposal}
+We did achieve all we set out to accomplish!
+
+\section{Conclusion}
+Todo
+
+
+
+\section*{Bibliography}
+\bibliographystyle{IEEEtran}
+\bibliography{writeup.bib}
+%\bibliographystyle{acl}
+%\bibliography{references.bib}
+\end{document}
