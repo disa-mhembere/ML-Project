@@ -13,10 +13,16 @@ from os import remove
 Feature vector order:
   [to_email_in,  from_email_in, cc_to_email_in, bcc_to_email_in, mean_email_len,
   to_email_outn,  from_email_outn, cc_to_email_outn, bcc_to_email_outn,
-  num_attachments, on_weekend, on_weekday, num_emails_dbh, num_emails_abh, indegree,
+  num_attachments, to_on_weekend, to_on_weekday, to_num_emails_dbh, to_num_emails_abh, 
+  from_num_emails_dhb, from_num_emails_abh, from_on_weekend, from_on_weekday, indegree,
   outdegree, scan1, triangle, transitivity, normed_eigenvalue
-  ]
-"""
+  ]  
+""" # NOTE: business_hours & weekend/day no distinction between from,cc,bcc
+FROM_NUM_EMAILS_DHB_INDEX = 14
+FROM_NUM_EMAILS_ABH_INDEX = 15
+FROM_ON_WEEKEND_INDEX = 16
+FROM_ON_WEEKDAY_INDEX = 17
+
 CC_INDEX_IN = 2
 CC_INDEX_OUTN = 7
 
@@ -27,7 +33,7 @@ TO_INDEX_IN = 0
 TO_INDEX_OUTN = 5
 
 EMAIL_LEN_INDEX = 4
-INV_INDEX_START = 14
+INV_INDEX_START = 18
 
 NUM_INVARIANTS = 6
 
@@ -45,6 +51,7 @@ class tsfv(object):
   
   def insert(self, _id, count_list, week):
     """
+    @obsolete
     Insert method for a single week for a user
     @param _id: the id of the user 
     @param count_list: the list/np.arrays with counts for a single user email
@@ -69,17 +76,20 @@ class tsfv(object):
       self.data[week][_id] = np.array([0]*self.num_features, dtype=np.float32) # NOTE: float32
 
   def insert_email(self, week, _id, to_email_in, to_email_outn, cc_to_email_in,
-     cc_to_email_outn, bcc_to_email_in, bcc_to_email_outn, during_business,
-     weekday, email_length, attachment):
+    cc_to_email_outn, bcc_to_email_in, bcc_to_email_outn, during_business,
+    weekday, email_length, attachment):
+    """ Email sent `From` me """
 
-    #if _id == 141: import pdb; pdb.set_trace()
     self.verify(week, _id) 
     self.data[week][_id] += [ to_email_in, 0, cc_to_email_in, bcc_to_email_in, email_length,
         to_email_outn, 0, cc_to_email_outn, bcc_to_email_outn, attachment,
-        int(not weekday), weekday, during_business, int(not during_business)
+        -weekday if weekday < 0 else 0, weekday if weekday > 0 else 0, 
+        during_business if during_business > 0 else 0, 
+        -during_business if during_business < 0 else 0, 0, 0, 0, 0
         ] + [0]*NUM_INVARIANTS
 
-  def update_to(self, week, recepient_id, is_in_network):
+  def update_to(self, week, recepient_id, is_in_network, weekday, during_business):
+    """" Email sent `to` me """
     self.verify(week, recepient_id) 
 
     if is_in_network:
@@ -87,8 +97,9 @@ class tsfv(object):
     else: 
       self.data[week][recepient_id][TO_INDEX_OUTN] += 1
 
+    self._update_day_time(week, recepient_id, weekday, during_business)
 
-  def update_cc(self, week, recepient_id, is_in_network):
+  def update_cc(self, week, recepient_id, is_in_network, weekday, during_business):
     self.verify(week, recepient_id) 
 
     if is_in_network:
@@ -96,20 +107,36 @@ class tsfv(object):
     else:
       self.data[week][recepient_id][CC_INDEX_OUTN] += 1
 
+    self._update_day_time(week, recepient_id, weekday, during_business)
 
-  def update_bcc(self, week, recepient_id, is_in_network):
-    self.verify(week, recepient_id) # Wasteful!
+
+  def update_bcc(self, week, recepient_id, is_in_network, weekday, during_business):
+    self.verify(week, recepient_id)
+
     if is_in_network:
       self.data[week][recepient_id][BCC_INDEX_IN] += 1
     else:
       self.data[week][recepient_id][BCC_INDEX_OUTN] += 1
 
+    self._update_day_time(week, recepient_id, weekday, during_business)
+
+  def _update_day_time(self, week, recepient_id, weekday, during_business):
+    """ Helper to update the time of day & day for received emails """
+    if weekday:
+      self.data[week][recepient_id][FROM_ON_WEEKDAY_INDEX] += 1
+    else: 
+      self.data[week][recepient_id][FROM_ON_WEEKEND_INDEX] += 1
+
+    if during_business:
+      self.data[week][recepient_id][FROM_NUM_EMAILS_DHB_INDEX] += 1
+    else: 
+      self.data[week][recepient_id][FROM_NUM_EMAILS_ABH_INDEX] += 1
+
   def update_inv(self, week, _id, invariants):
     """
     Add the precomputed invariants 
     """
-    self.verify(week, _id) # Wasteful!
-
+    self.verify(week, _id)
     self.data[week][_id][INV_INDEX_START:] = invariants
 
   def finish(self):

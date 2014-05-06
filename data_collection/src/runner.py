@@ -14,11 +14,12 @@ Key:
   - _abh : aftere business hours
 
 Feature vector order:
-  [to_email_in,  from_email_in, cc_to_email_in, bcc_to_email_in, mean_email_len_in, 
-  to_email_outn,  from_email_outn, cc_to_email_outn, bcc_to_email_outn, mean_email_len_outn,
-  num_attachments, on_weekend, on_weekday, num_emails_dbh, num_emails_abh, indegree, 
+  [to_email_in,  from_email_in, cc_to_email_in, bcc_to_email_in, mean_email_len,
+  to_email_outn,  from_email_outn, cc_to_email_outn, bcc_to_email_outn,
+  num_attachments, to_on_weekend, to_on_weekday, to_num_emails_dbh, to_num_emails_abh, 
+  from_num_emails_dhb, from_num_emails_abh, from_on_weekend, from_on_weekday, indegree,
   outdegree, scan1, triangle, transitivity, normed_eigenvalue
-  ]
+  ]  
 """
 import argparse
 import os
@@ -44,7 +45,7 @@ def run(data_dir, names_fn, save_fn, NUM_FEATURES):
   global people, tsfv_obj
 
   people = People(names_fn)
-  NUM_FEATURES = 20
+  NUM_FEATURES = 24
 
   tsfv_obj = tsfv(NUM_FEATURES)
 
@@ -83,11 +84,12 @@ def ingest_email(entry):
     _from = get_from(entry)
 
     _id = people.get_id(_from)
-    weekday = on_weekday(entry)
+    weekday = on_weekday(entry) # Number sent out on weekday (+ve)/weekend (-ve)
+    dbh = during_business(entry) # Number sent during(+ve)/after(-ve) business hours
     
     # Update for a single mail
     tsfv_obj.insert_email(week, _id, to_email_in, to_email_outn, cc_to_email_in, 
-        cc_to_email_outn, bcc_to_email_in, bcc_to_email_outn, during_business(entry), 
+        cc_to_email_outn, bcc_to_email_in, bcc_to_email_outn, dbh, 
         weekday, get_email_length(entry), has_attachment(entry))
     
     sender_domain = _from.split("@")[-1]
@@ -95,16 +97,15 @@ def ingest_email(entry):
     # Update to, cc, bcc
     for recepient in to:
       is_in_network = recepient.split("@")[-1] == sender_domain
-      tsfv_obj.update_to(week, people.get_id(recepient), is_in_network)
+      tsfv_obj.update_to(week, people.get_id(recepient), is_in_network, weekday > 0, dbh > 0,)
 
     for recepient in cc:
       is_in_network = recepient.split("@")[-1] == sender_domain
-      tsfv_obj.update_cc(week, people.get_id(recepient), is_in_network)
+      tsfv_obj.update_cc(week, people.get_id(recepient), is_in_network, weekday > 0, dbh > 0)
 
     for recepient in bcc:
       is_in_network = recepient.split("@")[-1] == sender_domain
-      tsfv_obj.update_bcc(week, people.get_id(recepient), is_in_network)
-
+      tsfv_obj.update_bcc(week, people.get_id(recepient), is_in_network, weekday > 0, dbh > 0)
 
 def main():
   parser = argparse.ArgumentParser(description="Extract data from emails and write \
@@ -112,7 +113,7 @@ def main():
   parser.add_argument("data_dir", action="store", help="The dir containing the email raw data")
   parser.add_argument("names_fn", action="store", help="The file with mapping from email \
       to name data")
-  parser.add_argument("-s", "--save_fn", action="store", default="tsfv.cPickle", help="Save filename")
+  parser.add_argument("-s", "--save_fn", action="store", default="tsfv.cPickle", help="Save file name for cPickle dump of tsfv object")
   parser.add_argument("-n", "--num_features", action="store", type=int, default=20, help="Save filename")
   result = parser.parse_args()
   

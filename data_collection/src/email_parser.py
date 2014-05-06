@@ -20,9 +20,11 @@ def count_in( tempList, fromAddress ):
   count = 0
   # Checking for sender and receiver domain to be the same
   for x in tempList:
-
-    if x.split('@')[1] == fromAddress.split('@')[1]:
-      count+=1
+    try:
+      if x.split('@')[1] == fromAddress.split('@')[1]:
+        count+=1
+    except:
+      print "\t===> Ignoring unknown email address: %s ..." % x
   return count
 
 def count_out( tempList ):
@@ -45,8 +47,8 @@ def during_business( msg ):
 
   count = 0
   _to = msg.get("to")
-  __cc = msg.get("cc")
-  __bcc = msg.get("bcc")
+  _cc = msg.get("cc")
+  _bcc = msg.get("bcc")
 
   if _to: count += len(_to.split(","))
   if _cc: count += len(_cc.split(","))
@@ -62,8 +64,8 @@ def on_weekday( msg ):
 
   count = 0
   _to = msg.get("to")
-  __cc = msg.get("cc")
-  __bcc = msg.get("bcc")
+  _cc = msg.get("cc")
+  _bcc = msg.get("bcc")
 
   if _to: count += len(_to.split(","))
   if _cc: count += len(_cc.split(","))
@@ -86,7 +88,7 @@ def get_cc( msg ):
   """ Extracts the "cc" from the email as List of Strings """
   if msg.has_key('Cc'):
     toList = [i.strip() for i in msg.get('Cc').split(',')]
-    count = count_in(toList)
+    count = count_in(toList, msg['From'])
     return ( toList, count, len(toList) - count)
   else:
     return ( [ ], 0, 0)
@@ -95,7 +97,7 @@ def get_bcc( msg ):
   """ Extracts the "bcc" from the email as a List of Strings """
   if msg.has_key('Bcc'):
     toList = [i.strip() for i in msg.get('Bcc').split(',')]
-    count = count_in(toList)
+    count = count_in(toList, msg['From'])
     return (toList, count, len(toList)-count)
   else: 
     return ([ ], 0, 0)
