@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[10pt]{article}
 
 \usepackage{graphicx}
 \usepackage{wrapfig}
@@ -9,16 +9,16 @@
 
 \oddsidemargin 0mm
 \evensidemargin 5mm
-\topmargin -20mm
-\textheight 240mm
+\topmargin -30mm
+\textheight 280mm
 \textwidth 160mm
 
-\parskip 12pt 
+\parskip 10pt 
 \setlength{\parindent}{0in}
 
 \pagestyle{myheadings} 
 
-\title{Identifying anomalous activity the Enron email corpus using glocal multivariate graph statistics}
+\title{Identifying anomalous activity in the Enron email corpus using machine learning and glocal multivariate graph statistics}
 
 \author{Disa Mhembere (dmhembe1, dmhembe1@jhu.edu), Kunal Lillaney (klillan1, lillaney@jhu.edu)}
 \date{}
@@ -28,25 +28,63 @@
 
 \section{Abstract}
 % Clearly explain your idea.A
+Graphs are quickly emerging as a leading abstraction for the representation of data flow and interactions within networks.
+One high-interest area of study deals with the use of graph theory to detect attacks and anomalous activity in networks 
+\cite{priebe2005scan}, \cite{park2009anomaly}, \cite{park2013anomaly}.
+Additionally, the use of machine learning to detect threats within networks has become a topic of particular interest 
+\cite{mahoney2003machine}, \cite{shon2005machine}, \cite{sommer2010outside}, \cite{shon2007hybrid}.
 
-\section{Methods}
-% Explain the methods you will be using and why they are appropriate.
+The use of glocal multivariate graph statistics \cite{mhembere2013computing} as a supplementary source of multi-dimensional 
+features for anomalous network detection, has not been explored \textit{to our knowledge}. Such statistics can expose otherwise-hidden
+topological attributes within networks that have the potential to improve anomalous activity detection within a network. 
+We propose the use of such statistics to generate novel features for use within classification tasks for the Enron corpus 
+of emails \cite{enronrepo2009}. We hope to show that the use of such statistics can help to identify periods of anomalous 
+activity and associated actors.
+
+\section{Methods} % Explain the methods you will be using and why they are appropriate.
+% GT Methods
+We intend to use the following statistics as supplementary attributes: Degree, Triangle Count, Clustering-coefficient,
+Scan statistics, K-means clustering, Connected Components, Spectral Decomposition, Adhesion and possibly more. 
+These statistics are chosen based on their ability to efficiently distill graph topological properties into discrete
+values that are usable by ML techniques. We will use the igraph \cite{igraph2006} package to create the time-series
+graphs and compute statistics. We will parse and transform the time series graphs into an ML ingestible format. \newline
+
+%ML Methods
+Since we can correlate events in the news with time, we hope to generate classification labels based on events
+surrounding reported Enron fraudulent activities. Literature \cite{shon2007hybrid}, \cite{shon2005machine} has 
+led us to believe that SVMs may be suitable from such a classification task. We propose the use of a weighted kNN to 
+identify malicious actors in the network at different time points since we conjecture the features of malicious users will 
+have high relative `similarity'. Please this may change as we research further into the topic.
 
 \section{Resources}
 % What resources will you use and how will you get them?
+We will use the following resources to generate our dataset: (i) \texttt{http://www.cs.cmu.edu/~./enron/} -- Contains 0.5M 
+emails from senior management of Enron, (ii) \texttt{http://cis.jhu.edu/~parky/Enron/enron.html} -- Scan Statistics on
+Enron graphs. We will use custom scripts to create ML-ingestible instances/features.
 
 \section{Milestones}
 \subsection{Must achieve}
-
+Able to correlate specific reported events in the news with anomalous email activity. 
 \subsection{Expected to achieve}
-
+Identify the different activities as anomalous or benign events.
 \subsection{Would like to achieve}
-
+Determine specific actors as anomalous at varying time points through hybrid weighted kNN and SVM techniques.
 
 \section{Final Writeup}
-% What will appear in the final writeup.
-
+% What will appear in the final writeup. 
+% Chose not to use bullets because of space
+Our final writeup will include (i) A survey of graph statical algorithms pertinent to classification tasks, 
+(ii) A survey of machine learning techniques used to detect anomalies in networks, 
+(iii) A cost-benefit analysis between methods in \textit{(ii)} and our approach,
+(iv) Detailed description of our methods and associated novelty,
+(v) The classification results of anomalous activity on the Enron dataset,
+(vi) The classification of individual actors during times of anomalies,
+(vii) Future work and Conclusion.
+ 
 \section{Bibliography}
-% A list of the papers relevant to this project.
+\bibliographystyle{IEEEtran}
+{\small
+\bibliography{template.bib}
+}
 
 \end{document}
