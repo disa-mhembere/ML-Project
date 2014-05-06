@@ -120,6 +120,9 @@ class tsfv(object):
         if sum_emails: # Divisor cannot be zero but OK if numerator is 
           self.data[week][_id][EMAIL_LEN_INDEX] /= float(sum_emails)
 
+  def normalize(self):
+  return None
+
   def __repr__(self):
     """ Print me """
     s = ""
