@@ -6,6 +6,8 @@
 \usepackage{latexsym}
 \setlength\titlebox{6.5cm}    % Expanding the titlebox
 
+\mathchardef\mhyp="2D
+
 \title{Identifying Anomalous Activity the Enron Email \\
 				Corpus using Glocal Multivariate Graph Statistics}
 
@@ -64,14 +66,23 @@ Carey et al \cite{priebe2005scan} showed that through the use of the a glocal gr
 statistic (namely the Scan statistic), one could successfully detect anomalous activity.
 We chose to look further and ask whether traditionally topologically-encoded graph statistics would
 be even better suited to the task of classifying both periods of anomaly and those
-most highly associated with the anomaly. As such we use the following statistics:
+most highly associated with the anomaly.
+
+For consistency, let $G$ be a graph, with vertex set $V$ and edges $u \sim v \in E$ (the set of all $m$ edges). Let $e_{ij}$ be a directed edge from $v_i$ to $v_j$. Let $l(u,v)$ be the edge distance between vertices $u, v$. Let the $k$-hop \emph{neighborhood} of a graph $G$ around vertex $v$ be denoted by $N_k[v;G]$, where $N_k[v;G] = \{u \in V:l(u,v) \le k\}$. Let $\eta_i$ denote the neighbors for $v_i$. Finally, let the $C\mhyp k$ denote the size of a clique as $k$, where a clique $C \subset V$ s.t $\forall v,u \in C\ \exists\ v \sim u$.
+
+
+ 
+As such we use the following statistics:
 \begin{itemize}
-\item Local degree 
-\item Local triangle count
-\item Local scan statistic
-\item Local triangle count
-\item Local clustering coefficient
-\item Eigen-spectral decomposition
+\item Local in-degree: $deg_{in} = \sum_{j \in \eta_i} v_{ji}\  \forall\ v \in V$
+\item Local out-degree: $deg_{out} = \sum_{j \in \eta_i} v_{ij}\  \forall\ v \in V$ 
+\item Local triangle count: $\Delta = C\mhyp3 \  \forall\ v \in V$
+\item Local scan-1 statistic: \\ $SS = \sum e_{ij} \in N_1[v_i;G] \forall\ v \in V$
+\item Local clustering coefficient: \\ Let, $deg = deg_{in} + deg_{out}$ 
+\\ $CC = \frac{2\Delta}{deg (deg-1)}$
+\item Eigen-spectral decomposition: $\lambda = \mathbf{vA}$, where $\lambda$ are the
+eigenvalues, $\mathbf{v}$ are the eigenvectors, and $\mathbf{A}$ is the adjacency matrix of $G$.
+
 \end{itemize}
 These statistics have proved extremely statistically powerful in summarizing graph
 topology \cite{pao2011statistical}. All but Eigen-spectral decomposition provide
