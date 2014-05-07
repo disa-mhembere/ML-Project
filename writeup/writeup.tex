@@ -37,38 +37,67 @@ The use of glocal multivariate graph statistics \cite{mhembere2013computing} as
 a supplementary source of multi-dimensional features for anomalous network detection,
 has not been explored \textit{to our knowledge}. Such statistics can expose 
 otherwise-latent topological attributes within networks that have the potential 
-to improve anomalous activity detection within a network. 
+to improve anomalous activity detection within a network.
 
 We use of such statistics to generate novel features for use within
 classification tasks for the Enron corpus of emails \cite{enronrepo2009}.
-We hope to show that the use of such statistics can help to identify periods of anomalous 
-activity and associated actors.
-
+We hope to show that the use of such statistics can help to identify periods of
+anomalous activity and associated actors.
 \end{abstract}
 
 
 \section{Introduction}
 Graphs are an intuitive high-level abstraction of interaction in any setting where
-there is information flow are several participants in the exchange of it.
+there is `information flow' and multiple points where its exchange may occur. TODO
 
 \section{Background}
 Todo
 
 \section{Design}
 This section describes our choice of glocal graph statistics and discusses their suitability
-to the task of detection anomalous actors in the Enron email corpus.
+to the task of detection of anomalous activity and actors in the Enron email corpus.
 We further discus our choice of Machine Learning algorithms. Lastly, we discuss our metrics
 of success and evaluation for our implementations.
 
 \subsection{Graph Statistics}
-Todo
+Carey et al \cite{priebe2005scan} showed that through the use of the a glocal graph 
+statistic (namely the Scan statistic), one could successfully detect anomalous activity.
+We chose to look further and ask whether traditionally topologically-encoded graph statistics would
+be even better suited to the task of classifying both periods of anomaly and those
+most highly associated with the anomaly. As such we use the following statistics:
+\begin{itemize}
+\item Local degree
+\item Local triangle count
+\item Local scan statistic
+\item Local triangle count
+\item Local clustering coefficient
+\item Eigen-spectral decomposition
+\end{itemize}
+These statistics have proved extremely statistically powerful in summarizing graph
+topology \cite{pao2011statistical}. All but Eigen-spectral decomposition provide
+connectivity and interaction information from one vertex to the next. These will
+logically be the most informative in our case since we hypothesize there is a strong
+correlation between topological non-homogeneity within graphs and anomalous/malicious
+activity. The spectral decomposition actually produces a compressed relationship mapping
+between each pair of vertices in the graph. As such, it follows that this is an obvious
+candidate for determining when atypical patterns occur in the graph.
 
-\subsection{Machine Learning Machinery}
-Literature \cite{shon2007hybrid,shon2005machine} has 
-led us to believe that SVMs may be suitable from such a classification task. 
-We propose the use of a weighted kNN to identify malicious actors in the network 
-at different time points since we conjecture the features of malicious users will 
-have high relative `similarity'.
+\subsection{Machine Learning Tools}
+\hspace*{10pt}\textit{Anomalous time periods:} \\
+One aim is to determine \textit{when} atypical communications occur. We choose to
+use weighted k-Nearest Neighbors (wKNN) to identify malicious actors in the network
+at different time points since we conjecture the features of malicious users will
+have high relative `similarity', where we use feature-vector squared euclidean distance
+as our metric for similarity. i.e.,
+
+$d = formula$
+
+
+\textit{Anomalous actors:} \\
+The other aim is to deterrine \textit{who} were those who caused the anomalous
+activity during these periods of unrest. Literature \cite{shon2007hybrid,shon2005machine}
+leads us to believe that Support Vector Machines (SVM)s are a suitable from such 
+a classification task. 
 
 
 \section{Methods}
@@ -89,11 +118,14 @@ at Enron.
 \subsubsection{Raw email Feature Extraction}
 
 \subsubsection{Challenges: Raw email Feature Extraction}
-We faced several
+We faced several:
 
-- Several email addresses to a single user
-- Non-uniform email addresses generated in raw text
-- Auto-generated emails
+\begin{itemize}
+\item Several email addresses to a single user
+\item Non-uniform email addresses generated in raw text
+\item Auto-generated emails
+\end{itemize}
+
 
 
 \subsubsection{Time Series Feature Extraction}
