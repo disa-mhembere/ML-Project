@@ -9,6 +9,10 @@ import numpy as np
 import cPickle
 from os import remove
 
+from sklearn import preprocessing
+import operator
+import pdb
+
 """
 Feature vector order:
   [to_email_in,  from_email_in, cc_to_email_in, bcc_to_email_in, mean_email_len,
@@ -148,7 +152,24 @@ class tsfv(object):
           self.data[week][_id][EMAIL_LEN_INDEX] /= float(sum_emails)
 
   def normalize(self):
-  return None
+    """ Using scikitlearn to normalize the feature value matrix """
+    # Iterating over the dict in sorted order to extract feature vectors
+    test = []
+    for i in sorted( self.data.iteritems(), key=operator.itemgetter(0) ):
+      for j in i[1].iteritems():
+        test.append(j[1])
+    x_train = np.vstack( [ test ] )
+    
+    # Normalizing the matrix using scikitlearn
+    min_max_scaler = preprocessing.MinMaxScaler()
+    x_train_minmax = min_max_scaler.fit_transform( x_train )
+
+    # Inserting the array back into the dict
+    counter = 0
+    for i in sorted( self.data.iteritems(), key=operator.itemgetter(0) ):
+      for j in i[1].iteritems():
+        self.data.get( i[0] )[ j[0] ] = x_train_minmax[counter]
+        counter = counter + 1
 
   def __repr__(self):
     """ Print me """
@@ -170,7 +191,7 @@ def load(filename):
   return p
 
 def mini_test():
-  tsfv_obj = tsfv(20)
+  tsfv_obj = tsfv(24)
   #tsfv_obj.insert(1, np.array([1, 32, 5, 3, 5]), 1)
   #tsfv_obj.insert(1, np.array([2, 2, 2, 2, 2]), 1)
   #tsfv_obj.insert(3, np.array([1, 32, 5, 3, 5]), 4)
@@ -178,9 +199,14 @@ def mini_test():
   tsfv_obj.insert_email(week=1, _id=69, to_email_in=5, to_email_outn=10, cc_to_email_in=15, cc_to_email_outn=0, bcc_to_email_in=0, bcc_to_email_outn=0, during_business=1, weekday=1, email_length=1000, attachment=3)
 
   tsfv_obj.insert_email(week=1, _id=69, to_email_in=10, to_email_outn=5, cc_to_email_in=0, cc_to_email_outn=15, bcc_to_email_in=15, bcc_to_email_outn=15, during_business=0, weekday=14, email_length=1000, attachment=12)
+  
+  tsfv_obj.insert_email(week=2, _id=70, to_email_in=11, to_email_outn=10, cc_to_email_in=0, cc_to_email_outn=11, bcc_to_email_in=15, bcc_to_email_outn=13, during_business=0, weekday=14, email_length=1000, attachment=12)
+  
+  tsfv_obj.insert_email(week=3, _id=100, to_email_in=11, to_email_outn=20, cc_to_email_in=0, cc_to_email_outn=11, bcc_to_email_in=15, bcc_to_email_outn=15, during_business=0, weekday=9, email_length=1, attachment=1)
 
   tsfv_obj.finish()
-
+  pdb.set_trace()
+  tsfv_obj.normalize()
   print tsfv_obj
   fn =  "rando.cPickle"
 
