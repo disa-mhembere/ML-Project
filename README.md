@@ -10,4 +10,4 @@ Tags for commits:
 - [Core]: core file added
 - [Alg]: Algorithm added
 - [Admin]: Administrative work
-- [Write]: Write up
+- [Wu]: Write up
