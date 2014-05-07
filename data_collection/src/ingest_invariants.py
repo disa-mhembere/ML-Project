@@ -39,7 +39,8 @@ def ingest(fn, inv_dir):
       inv = get_r_array(arr_fn)
       print "Processing week", week, " for file:", arr_fn, ": INV:", inv, " ..." 
       tsfv_obj.update_inv(week[0], int(os.path.basename(arr_fn)), inv)
-
+  print " Normalizing the tsfv object ...."
+  tsfv_obj.normalize()
   print "Saving updated tsfv object ..."
   tsfv_obj.save(os.path.splitext(fn)[0]+"_inv.cPickle")
   print "Roger that!"
