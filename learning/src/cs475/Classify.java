@@ -24,8 +24,7 @@ public class Classify
   public static void main(String[] args) throws IOException
   {
     // Parse the command line.
-    String[] manditory_args =
-    { "mode" };
+    String[] manditory_args = { "mode" };
     createCommandLineOptions();
     CommandLineUtilities.initCommandLineParameters(args, Classify.options,
         manditory_args);
@@ -91,7 +90,7 @@ public class Classify
     Predictor predictor = null;
 
     if (algorithm.equalsIgnoreCase("weighted_knn"))
-      ; // TODO: Stub
+    	System.out.println("Hello");
 //      predictor = new MajorityClassifier();
     
     else if(algorithm.equalsIgnoreCase("svm"))
