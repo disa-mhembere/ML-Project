@@ -16,8 +16,9 @@ public class WeightedKNN extends Predictor
   
   double [][] distanceMatrix = null;
   List<Instance> instances;
+  
 
-  public WeightedKNN() {
+  public WeightedKNN( ... ) {
     
   }
   
@@ -53,6 +54,11 @@ public class WeightedKNN extends Predictor
     return new ClassificationLabel(getCluster(instance));
   }
   
+  /**
+   * Return which cluster a specific instance should belong to
+   * @param instance
+   * @return
+   */
   private int getCluster(Instance instance)
   {
     // TODO Auto-generated method stub

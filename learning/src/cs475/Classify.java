@@ -19,7 +19,8 @@ import cs475.classification.*;
 public class Classify
 {
   static public LinkedList<Option> options = new LinkedList<Option>();
-//  static int gd_iterations = 20;
+  static int clustering_training_iterations = 10;
+  static int min_swapped_termination_threshold = 10;
   
   public static void main(String[] args) throws IOException
   {
@@ -91,7 +92,7 @@ public class Classify
 
     if (algorithm.equalsIgnoreCase("weighted_knn"))
     	System.out.println("Hello");
-//      predictor = new MajorityClassifier();
+      predictor = new WeightedKNN(...);
     
     else if(algorithm.equalsIgnoreCase("svm"))
       ; // TODO: Stub
@@ -191,8 +192,18 @@ public class Classify
 
   private static void createCommandLineOptions()
   {
-//    TODO: Stub
-//    registerOption("online_learning_rate", "double", true, "The learning rate for perceptron.");
+    registerOption("data", "String", true, "The data to use.");
+    registerOption("mode", "String", true, "Operating mode: train or test.");
+    registerOption("predictions_file", "String", true,
+        "The predictions file to create.");
+    registerOption("algorithm", "String", true,
+        "The name of the algorithm for training.");
+    registerOption("model_file", "String", true,
+        "The name of the model file to create/load.");
+    registerOption("clustering_training_iterations", "int", true, "The number"
+        + " of clustering iterations.");
+    registerOption("min_swapped_termination_threshold", "int", true, "Threshold for "
+        + "number of swaps for instance clusters before convergence");
     
   }
 }
