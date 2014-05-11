@@ -8,11 +8,13 @@ public class Instance implements Serializable
 
   Label _label = null;
   FeatureVector _feature_vector = null;
+  Label _orginalLabel = null;
 
   public Instance(FeatureVector feature_vector, Label label)
   {
     this._feature_vector = feature_vector;
     this._label = label;
+    this._orginalLabel = label;
   }
 
   public Label getLabel()
@@ -20,7 +22,15 @@ public class Instance implements Serializable
     return _label;
   }
 
-  public void setLabel(Label label)
+  public Label get_orginalLabel() {
+	return _orginalLabel;
+}
+
+public void set_orginalLabel(Label _orginalLabel) {
+	this._orginalLabel = _orginalLabel;
+}
+
+public void setLabel(Label label)
   {
     this._label = label;
   }

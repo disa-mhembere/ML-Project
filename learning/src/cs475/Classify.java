@@ -20,7 +20,7 @@ public class Classify
 {
   static public LinkedList<Option> options = new LinkedList<Option>();
   static int clustering_training_iterations = 10;
-  static int min_swapped_termination_threshold = 10;
+  static double min_swapped_termination_threshold = 0.10;
   
   public static void main(String[] args) throws IOException
   {
@@ -32,14 +32,18 @@ public class Classify
 
     String mode = CommandLineUtilities.getOptionValue("mode");
     String data = CommandLineUtilities.getOptionValue("data");
-    String predictions_file = CommandLineUtilities
-        .getOptionValue("predictions_file");
+    String predictions_file = CommandLineUtilities.getOptionValue("predictions_file");
     String algorithm = CommandLineUtilities.getOptionValue("algorithm");
     String model_file = CommandLineUtilities.getOptionValue("model_file");
     
 //    if (CommandLineUtilities.hasArg("gd_iterations"))
 //        gd_iterations = CommandLineUtilities.getOptionValueAsInt("gd_iterations");
     
+    if (CommandLineUtilities.hasArg("gd_iterations"))
+    	clustering_training_iterations = CommandLineUtilities.getOptionValueAsInt("clustering_training_iterations");
+    
+    if (CommandLineUtilities.hasArg("gd_iterations"))
+    	min_swapped_termination_threshold = CommandLineUtilities.getOptionValueAsFloat("min_swapped_termination_threshold");
 
     // required training args
     if (mode.equalsIgnoreCase("train"))
@@ -51,7 +55,7 @@ public class Classify
         System.exit(0);
       }
       // Load the training data
-      DataReader data_reader = new DataReader(data, true);
+      DataReader data_reader = new DataReader(data, false);
       List<Instance> instances = data_reader.readData();
       data_reader.close();
 
@@ -91,8 +95,7 @@ public class Classify
     Predictor predictor = null;
 
     if (algorithm.equalsIgnoreCase("weighted_knn"))
-    	System.out.println("Hello");
-      predictor = new WeightedKNN(...);
+      	predictor = new WeightedKNN( clustering_training_iterations );
     
     else if(algorithm.equalsIgnoreCase("svm"))
       ; // TODO: Stub
@@ -202,7 +205,7 @@ public class Classify
         "The name of the model file to create/load.");
     registerOption("clustering_training_iterations", "int", true, "The number"
         + " of clustering iterations.");
-    registerOption("min_swapped_termination_threshold", "int", true, "Threshold for "
+    registerOption("min_swapped_termination_threshold", "double", true, "Threshold for "
         + "number of swaps for instance clusters before convergence");
     
   }
