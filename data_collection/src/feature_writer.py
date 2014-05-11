@@ -35,7 +35,8 @@ def write_file( tsfvName, writeFile ):
           # Setting the flag to True, will insert a newline at the end of this feaature vector
           flag = True
           # Writing the feature vector to file
-          filename.write( "{}:{} ".format( idx+1, str(value) ) )
+          preciseValue = "{:.16f}".format(value)
+          filename.write( "{}:{} ".format( idx+1, str(preciseValue) ) )
 
       # If the feature vector had a single non-zero value then insert a newline
       if ( flag ):
