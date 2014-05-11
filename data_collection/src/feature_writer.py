@@ -25,7 +25,8 @@ def write_file( tsfvName, writeFile ):
     
     print "Week id:", i[0]
     for j in i[1].iteritems():
-      
+     
+      filename.write( "{} ".format(j[0]) )
       print "\tUser id:", j[0]
       for idx, value in enumerate(j[1]):
      
