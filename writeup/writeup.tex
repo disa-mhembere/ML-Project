@@ -54,11 +54,19 @@ there is `information flow' and multiple points where its exchange may occur. TO
 
 \section{Background}
 In the early 2000's Chan et al \cite{chan2003machine} suggested non-bayesian 
-learning algorithms that successfully avoided the zero-frequency problem when determing
+learning algorithms that successfully avoided the zero-frequency problem when determining
 anomalous network activity given no samples. They propose the Learning rules for Anomaly
 Detection (LERAD), a random sampling-based algorithm that attempts to learn anomaly
 rules by bipartition feature-vectors and computing the probability of one feature set
-partition to the other. Such algorithms tend to have high misclassification rates.  
+partition to the other. The major drawback of this algorithm is the assumption that the 
+training data is free from attacks which tends to be timely and difficult to rigorously
+determine.
+
+Chan et al \cite{chan2003machine} also developed Clustering for Anomaly Detection (CLAD).
+
+Shon et al proposed \cite{shon2007hybrid} proposed an unsupervised variant of the SVM, termed
+the Enhanced SVM. It reduced the false-positive rate and furthermore no longer required 
+training data, using a method similar to one-class SVMs.
 
 
 
@@ -77,8 +85,11 @@ We chose to look further and ask whether traditionally topologically-encoded gra
 be even better suited to the task of classifying both periods of anomaly and those
 most highly associated with the anomaly.
 
-For consistency, let $G$ be a graph, with vertex set $V$ and edges $u \sim v \in E$ (the set of all $m$ edges). Let $e_{ij}$ be a directed edge from $v_i$ to $v_j$. Let $l(u,v)$ be the edge distance between vertices $u, v$. Let the $k$-hop \emph{neighborhood} of a graph $G$ around vertex $v$ be denoted by $N_k[v;G]$, where $N_k[v;G] = \{u \in V:l(u,v) \le k\}$. Let $\eta_i$ denote the neighbors for $v_i$. Finally, let the $C\mhyp k$ denote the size of a clique as $k$, where a clique $C \subset V$ s.t $\forall v,u \in C\ \exists\ v \sim u$.
-
+For consistency, let $G$ be a graph, with vertex set $V$ and edges $u \sim v \in E$ (the set of
+all $m$ edges). Let $e_{ij}$ be a directed edge from $v_i$ to $v_j$. Let $l(u,v)$ be the edge
+distance between vertices $u, v$. Let the $k$-hop \emph{neighborhood} of a graph $G$ around
+vertex $v$ be denoted by $N_k[v;G]$, where $N_k[v;G] = \{u \in V:l(u,v) \le k\}$. Let $\eta_i$ 
+denote the neighbors for $v_i$. Finally, let the $C\mhyp k$ denote the size of a clique as $k$, where a clique $C \subset V$ s.t $\forall v,u \in C\ \exists\ v \sim u$.
 
  
 As such we use the following statistics:
