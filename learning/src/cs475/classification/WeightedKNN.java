@@ -1,8 +1,10 @@
 package cs475.classification;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import cs475.ClassificationLabel;
@@ -10,24 +12,69 @@ import cs475.Instance;
 import cs475.Label;
 import cs475.Predictor;
 import cs475.structures.SparseVector;
+import cs475.utils.Printer;
 
 public class WeightedKNN extends Predictor
 {
   
   double [][] distanceMatrix = null;
   List<Instance> instances;
+  int number_itrerations = 0;
   
 
-  public WeightedKNN( ... ) {
-    
+  public WeightedKNN( int iterations) {
+    number_itrerations = iterations;
   }
   
   private static final long serialVersionUID = 1L;
 
+  
+  public Label getVote(Instance instance, int instanceIndex){
+	  
+	  // Data Structure to store the weight for each Label
+	  HashMap<Label, Double> countKeeper = new HashMap<Label, Double>();
+	  
+	  // Iterating over the instance list and update the HashMap
+	  for (int i=0; i<this.instances.size(); i++){
+		  Label clusterId = this.instances.get(i).getLabel();
+		  double clusterWeight = distanceMatrix[i][instanceIndex]; 
+		  if ( countKeeper.containsKey( clusterId ))
+			  countKeeper.put(clusterId, countKeeper.get(clusterId) + (Double)(clusterWeight));
+		  else
+			  countKeeper.put(clusterId, clusterWeight);		  
+	  }
+	  
+	  //Iterating over the HashMap to get a key associated with the maximum value
+	  Map.Entry<Label, Double> maxEntry = null;
+	  
+	  for(Map.Entry<Label, Double> entry : countKeeper.entrySet()){
+		  //System.out.println(entry.getKey()+" "+entry.getValue());
+		  if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0){
+			  maxEntry = entry;
+		  }
+	  }
+	  
+	  return maxEntry.getKey();
+  }
   @Override
   public void train(List<Instance> instances) {
+	  
+	
     distanceMatrix = new double[instances.size()][instances.size()];
     this.instances = instances;
+    
+   System.out.println("Hello");
+    
+    // Computing the distance matrix once for every train
+    computeDistanceMatrix();
+    for ( int l=0; l<number_itrerations; l++){
+    	// Iterating over all the instances
+        for (int i=0; i<this.instances.size(); i++) {
+        	instances.get(i).setLabel( getVote(this.instances.get(i), i) );
+        }
+    }
+    //Printer.printInstanceList(instances);
+    Printer.printLabelList(instances);
   }
   
   /**
@@ -46,9 +93,7 @@ public class WeightedKNN extends Predictor
 
   @Override
   public Label predict(Instance instance)
-  {
-    computeDistanceMatrix();
-    
+  {	  
     if (null == distanceMatrix)
       throw new IllegalStateException("You must train before you can predict -- genius!");
     return new ClassificationLabel(getCluster(instance));
