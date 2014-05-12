@@ -47,6 +47,29 @@ def write_file( tsfvName, writeFile ):
         filename.write('\n')
       flag = False
 
+def write_small_dict( tsfvName, writeFile ):
+  """ Writes the TSFV as a dict """
+
+  # Read the Pickle file from disk and load it
+  fs = open(tsfvName, 'rb')
+  tsfv = cPickle.load(fs)
+  filename = open(writeFile, 'wb')
+
+  # Iterating over hte TSFV data structure
+
+  for i in tsfv.data.iteritems():
+    for idx,value in enumerate (i[1]):
+
+      if ( value!=0.0) :
+
+        flag = True
+        preciseValue = "{:.16f}".format(value)
+        filename.write( "{}:{} ".format( idx+1, str(preciseValue) ) )
+
+    if ( flag ):
+        filaname.write('\n')
+    flag = False
+
 def main():
 
   # Sample data structure for testing before tsfv
@@ -61,7 +84,8 @@ def main():
   result = parser.parse_args()
 
   # Calling the function to write the feature vector to a file
-  write_file(result.read_file, result.write_file)
+  #write_file(result.read_file, result.write_file)
+  write_small_dict) result.read_file, result.write_file )
 
 if __name__ == "__main__":
   main()
