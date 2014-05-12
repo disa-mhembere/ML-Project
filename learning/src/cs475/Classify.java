@@ -41,10 +41,10 @@ public class Classify
 //    if (CommandLineUtilities.hasArg("gd_iterations"))
 //        gd_iterations = CommandLineUtilities.getOptionValueAsInt("gd_iterations");
     
-    if (CommandLineUtilities.hasArg("gd_iterations"))
+    if (CommandLineUtilities.hasArg("clustering_training_iterations"))
     	clustering_training_iterations = CommandLineUtilities.getOptionValueAsInt("clustering_training_iterations");
     
-    if (CommandLineUtilities.hasArg("gd_iterations"))
+    if (CommandLineUtilities.hasArg("min_swapped_termination_threshold"))
     	min_swapped_termination_threshold = CommandLineUtilities.getOptionValueAsFloat("min_swapped_termination_threshold");
 
     // required training args

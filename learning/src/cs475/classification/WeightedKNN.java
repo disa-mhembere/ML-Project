@@ -39,9 +39,10 @@ public class WeightedKNN extends Predictor
 	  
 	  // Iterating over the instance list and update the HashMap
 	  for (int i=0; i<this.instances.size(); i++){
+		  
 		  Label clusterId = this.instances.get(i).getLabel();
 		  
-		  double clusterWeight = distanceMatrix.get(i).get(instanceIndex);
+		  double clusterWeight = 1 / distanceMatrix.get(i).get(instanceIndex);
 		  
 		  if ( countKeeper.containsKey( clusterId ))
 			  countKeeper.put(clusterId, countKeeper.get(clusterId) + (Double)(clusterWeight));
@@ -75,12 +76,14 @@ public class WeightedKNN extends Predictor
     System.out.println("Training");
     for ( int l=0; l<number_itrerations; l++){
     	// Iterating over all the instances
+    	long startTrain = System.currentTimeMillis();
         for (int i=0; i<this.instances.size(); i++) {
         	instances.get(i).setLabel( getVote(this.instances.get(i), i) );
         }
+        System.out.println("Train Time for Iteration "+ l +": " + (System.currentTimeMillis()-startTrain)/1000.0 );
     }
     //Printer.printInstanceList(instances);
-    Printer.printLabelList(instances);
+    //Printer.printLabelList(instances);
     Printer.writeLabelList(instances);
   }
   
@@ -91,6 +94,7 @@ public class WeightedKNN extends Predictor
   void computeDistanceMatrix() {
 	  
 	System.out.println("Computing Distance Matrix");
+	long startCompute = System.currentTimeMillis();
     for (int i=0; i<this.instances.size(); i++) {
       Instance curr = this.instances.get(i);
       SparseVector newSV = new SparseVector();
@@ -101,8 +105,9 @@ public class WeightedKNN extends Predictor
       }
       distanceMatrix.add(newSV); // The row to the distance Matrix
     }
+    System.out.println("Compute Time: " + (System.currentTimeMillis()-startCompute)/1000.0 );
     // Makes the feature vector null
-    clearListInstances();
+    //clearListInstances();
     
   }
   
