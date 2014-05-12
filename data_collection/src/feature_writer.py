@@ -80,12 +80,15 @@ def main():
   parser = argparse.ArgumentParser(description="Write the tsfv to file")
   parser.add_argument("read_file", action="store", help="File Name to read from")
   parser.add_argument("write_file", action="store", help="File Name to write to")
+  parser.add_argument("--small", "-s",action="store_true", help="Write small dict (collapsed TSFV)")
 
   result = parser.parse_args()
 
+  if result.small:
+    write_small_dict( result.read_file, result.write_file )
+
   # Calling the function to write the feature vector to a file
   #write_file(result.read_file, result.write_file)
-  write_small_dict) result.read_file, result.write_file )
 
 if __name__ == "__main__":
   main()
