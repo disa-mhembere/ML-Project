@@ -1,5 +1,6 @@
 package cs475.classification;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,8 +17,8 @@ import cs475.utils.Printer;
 
 public class WeightedKNN extends Predictor
 {
+  List<SparseVector> distanceMatrix; // The
   
-  double [][] distanceMatrix = null;
   List<Instance> instances;
   int number_itrerations = 0;
   
@@ -37,7 +38,9 @@ public class WeightedKNN extends Predictor
 	  // Iterating over the instance list and update the HashMap
 	  for (int i=0; i<this.instances.size(); i++){
 		  Label clusterId = this.instances.get(i).getLabel();
-		  double clusterWeight = distanceMatrix[i][instanceIndex]; 
+		  
+		  double clusterWeight = distanceMatrix.get(i).get(instanceIndex);
+		  
 		  if ( countKeeper.containsKey( clusterId ))
 			  countKeeper.put(clusterId, countKeeper.get(clusterId) + (Double)(clusterWeight));
 		  else
@@ -58,15 +61,15 @@ public class WeightedKNN extends Predictor
   }
   @Override
   public void train(List<Instance> instances) {
-	  
-	
-    distanceMatrix = new double[instances.size()][instances.size()];
-    this.instances = instances;
+    distanceMatrix = new ArrayList<SparseVector>();
     
-   System.out.println("Hello");
+    // distanceMatrix = new double[instances.size()][instances.size()];
+    
+    this.instances = instances;
     
     // Computing the distance matrix once for every train
     computeDistanceMatrix();
+    
     for ( int l=0; l<number_itrerations; l++){
     	// Iterating over all the instances
         for (int i=0; i<this.instances.size(); i++) {
@@ -84,10 +87,13 @@ public class WeightedKNN extends Predictor
   void computeDistanceMatrix() {
     for (int i=0; i<this.instances.size(); i++) {
       Instance curr = this.instances.get(i);
+      SparseVector newSV = new SparseVector();
+      
       for (int ii=0; ii<this.instances.size(); ii++) {
-        distanceMatrix[i][ii] = eucl_dist(curr.getFeatureVector(), 
-                                this.instances.get(ii).getFeatureVector()); // Each row belongs to a specific feature vector 
+        newSV.add(ii, eucl_dist(curr.getFeatureVector(), 
+                        this.instances.get(ii).getFeatureVector())); // Each row belongs to a specific feature vector 
       }
+      distanceMatrix.add(newSV); // The row to the distance Matrix
     }
   }
 
