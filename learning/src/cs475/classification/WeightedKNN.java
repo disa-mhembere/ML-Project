@@ -1,5 +1,7 @@
 package cs475.classification;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,7 +62,7 @@ public class WeightedKNN extends Predictor
 	  return maxEntry.getKey();
   }
   @Override
-  public void train(List<Instance> instances) {
+  public void train(List<Instance> instances) throws FileNotFoundException, UnsupportedEncodingException {
     distanceMatrix = new ArrayList<SparseVector>();
     
     // distanceMatrix = new double[instances.size()][instances.size()];
@@ -70,6 +72,7 @@ public class WeightedKNN extends Predictor
     // Computing the distance matrix once for every train
     computeDistanceMatrix();
     
+    System.out.println("Training");
     for ( int l=0; l<number_itrerations; l++){
     	// Iterating over all the instances
         for (int i=0; i<this.instances.size(); i++) {
@@ -78,6 +81,7 @@ public class WeightedKNN extends Predictor
     }
     //Printer.printInstanceList(instances);
     Printer.printLabelList(instances);
+    Printer.writeLabelList(instances);
   }
   
   /**
@@ -85,6 +89,8 @@ public class WeightedKNN extends Predictor
    * @param instances feature vector instances
    */
   void computeDistanceMatrix() {
+	  
+	System.out.println("Computing Distance Matrix");
     for (int i=0; i<this.instances.size(); i++) {
       Instance curr = this.instances.get(i);
       SparseVector newSV = new SparseVector();
@@ -95,6 +101,23 @@ public class WeightedKNN extends Predictor
       }
       distanceMatrix.add(newSV); // The row to the distance Matrix
     }
+    // Makes the feature vector null
+    clearListInstances();
+    
+  }
+  
+  /**
+   * Clear the feature vector in List od instances
+   * @param instances feature vector instances
+   */
+  void clearListInstances() {
+	 
+	  System.out.println("Garbage Collecting");
+	  //Garbage Collect feature vectors
+	   for (int i=0;i<this.instances.size(); i++){
+	    this.instances.get(i).setFeatureVector(null);
+	   }
+	   System.gc();
   }
 
   @Override

@@ -4,10 +4,12 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -89,7 +91,7 @@ public class Classify
     }
   }
 
-  private static Predictor train(List<Instance> instances, String algorithm)
+  private static Predictor train(List<Instance> instances, String algorithm) throws FileNotFoundException, UnsupportedEncodingException
   {
 
     Predictor predictor = null;
