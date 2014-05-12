@@ -23,10 +23,11 @@ public class WeightedKNN extends Predictor
   
   List<Instance> instances;
   int number_itrerations = 0;
-  
+  String cluster_output;
 
-  public WeightedKNN( int iterations) {
+  public WeightedKNN( int iterations, String cluster_output) {
     number_itrerations = iterations;
+    this.cluster_output = cluster_output;
   }
   
   private static final long serialVersionUID = 1L;
@@ -84,7 +85,7 @@ public class WeightedKNN extends Predictor
     }
     //Printer.printInstanceList(instances);
     //Printer.printLabelList(instances);
-    Printer.writeLabelList(instances);
+    Printer.writeLabelList(instances, this.cluster_output);
   }
   
   /**

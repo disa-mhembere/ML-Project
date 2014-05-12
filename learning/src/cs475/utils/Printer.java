@@ -25,8 +25,8 @@ public class Printer
 		  System.out.println("Lable:" + i.getLabel().toString() + ", Old Label:" + i.get_orginalLabel().toString());
   }
   
-  public static void writeLabelList(List<Instance> l) throws FileNotFoundException, UnsupportedEncodingException{
-	  PrintWriter writer = new PrintWriter("/mnt/mrbrain/ML-Project/results/classification/cluster", "UTF-8");
+  public static void writeLabelList(List<Instance> l, String cluster_output) throws FileNotFoundException, UnsupportedEncodingException{
+	  PrintWriter writer = new PrintWriter(cluster_output, "UTF-8");
 	  Collections.sort(l, new InstanceComparator() );
 	  for (Instance i: l){
 		  writer.println(i.getLabel().toString() + "," + i.get_orginalLabel().toString());

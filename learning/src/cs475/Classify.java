@@ -23,6 +23,7 @@ public class Classify
   static public LinkedList<Option> options = new LinkedList<Option>();
   static int clustering_training_iterations = 10;
   static double min_swapped_termination_threshold = 0.10;
+  static String cluster_output = "default_cluster.clusters";
   
   public static void main(String[] args) throws IOException
   {
@@ -38,8 +39,8 @@ public class Classify
     String algorithm = CommandLineUtilities.getOptionValue("algorithm");
     String model_file = CommandLineUtilities.getOptionValue("model_file");
     
-//    if (CommandLineUtilities.hasArg("gd_iterations"))
-//        gd_iterations = CommandLineUtilities.getOptionValueAsInt("gd_iterations");
+    if (CommandLineUtilities.hasArg("cluster_output"))
+      cluster_output = CommandLineUtilities.getOptionValue("cluster_output");
     
     if (CommandLineUtilities.hasArg("clustering_training_iterations"))
     	clustering_training_iterations = CommandLineUtilities.getOptionValueAsInt("clustering_training_iterations");
@@ -97,11 +98,10 @@ public class Classify
     Predictor predictor = null;
 
     if (algorithm.equalsIgnoreCase("weighted_knn"))
-      	predictor = new WeightedKNN( clustering_training_iterations );
+      	predictor = new WeightedKNN( clustering_training_iterations, cluster_output );
     
     else if(algorithm.equalsIgnoreCase("svm"))
       ; // TODO: Stub
-//      predictor = new MarginPerceptron(online_learning_rate, online_training_iterations);
     
     else
     {
@@ -209,6 +209,8 @@ public class Classify
         + " of clustering iterations.");
     registerOption("min_swapped_termination_threshold", "double", true, "Threshold for "
         + "number of swaps for instance clusters before convergence");
+    registerOption("cluster_output", "String", true,
+        "The name of the output file for clusters");
     
   }
 }
