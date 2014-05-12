@@ -45,7 +45,7 @@ def run(data_dir, names_fn, save_fn, NUM_FEATURES):
   global people, tsfv_obj
 
   people = People(names_fn)
-  NUM_FEATURES = 24
+  NUM_FEATURES = NUM_FEATURES
 
   tsfv_obj = tsfv(NUM_FEATURES)
 
@@ -114,7 +114,7 @@ def main():
   parser.add_argument("names_fn", action="store", help="The file with mapping from email \
       to name data")
   parser.add_argument("-s", "--save_fn", action="store", default="tsfv.cPickle", help="Save file name for cPickle dump of tsfv object")
-  parser.add_argument("-n", "--num_features", action="store", type=int, default=20, help="Save filename")
+  parser.add_argument("-n", "--num_features", action="store", type=int, default=24, help="Save filename")
   result = parser.parse_args()
   
   run(result.data_dir, result.names_fn, result.save_fn, result.num_features)
