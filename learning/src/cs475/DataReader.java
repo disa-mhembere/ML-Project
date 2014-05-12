@@ -30,9 +30,11 @@ public class DataReader
   public List<Instance> readData()
   {
     ArrayList<Instance> instances = new ArrayList<Instance>();
-
+    
+    int lineCount = 0;
     while (this._scanner.hasNextLine())
     {
+    	lineCount++;
       String line = this._scanner.nextLine();
       if (line.trim().length() == 0) continue;
 
@@ -67,7 +69,14 @@ public class DataReader
         String item = split_line[ii];
         String name = item.split(":")[0];
         int index = Integer.parseInt(name);
-        double value = Double.parseDouble(item.split(":")[1]);
+        double value = 0.0;
+        
+        try{
+        value = Double.parseDouble(item.split(":")[1]);
+        }
+        catch( Exception e){
+        	System.out.println(item+":: "+lineCount);
+        }
 
         if (value != 0) feature_vector.add(index, value);
       }

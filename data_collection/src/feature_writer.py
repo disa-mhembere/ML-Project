@@ -8,6 +8,8 @@
 import operator
 import argparse
 import cPickle
+import numpy as np
+
 import pdb
 
 def write_file( tsfvName, writeFile ):
@@ -25,8 +27,9 @@ def write_file( tsfvName, writeFile ):
     
     print "Week id:", i[0]
     for j in i[1].iteritems():
-     
-      filename.write( "{} ".format(j[0]) )
+    
+      if np.count_nonzero(j[1]) > 0:
+        filename.write( "{} ".format(j[0]) )
       print "\tUser id:", j[0]
       for idx, value in enumerate(j[1]):
      
