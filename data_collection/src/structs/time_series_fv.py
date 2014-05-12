@@ -178,6 +178,23 @@ class tsfv(object):
       for person_id in sorted(self.data[week].keys()):
         s += "id: %d ==> Counts: %s\n" % (person_id, str(self.data[week][person_id]))
     return s
+  
+  def collapse(self, fn="compositeTSFV.cPickle"):
+    """ Collapse time series feature vector in to a single ID feature vector """
+    unique_id_count = 0
+    composite = {} # key = user_id, value = fv
+
+    for key in self.data.keys(): # (yyyy, week)
+      for entry in self.data[key].iteritems(): # (id, FV)
+        if composite.has_key(entry[0]):
+          composite[entry[0]] += entry[1]
+        else: 
+          print "Adding new id:", entry[0]
+          unique_id_count += 1
+          composite[entry[0]] = entry[1]
+
+    print "Unique id's added to compositeTSFV =", unique_id_count
+    cPickle.dump(composite, open(fn, "wb"), protocol=2)
 
   def save(self, output_filename):
     f = open(output_filename, "wb")
@@ -192,10 +209,6 @@ def load(filename):
 
 def mini_test():
   tsfv_obj = tsfv(24)
-  #tsfv_obj.insert(1, np.array([1, 32, 5, 3, 5]), 1)
-  #tsfv_obj.insert(1, np.array([2, 2, 2, 2, 2]), 1)
-  #tsfv_obj.insert(3, np.array([1, 32, 5, 3, 5]), 4)
-
   tsfv_obj.insert_email(week=1, _id=69, to_email_in=5, to_email_outn=10, cc_to_email_in=15, cc_to_email_outn=0, bcc_to_email_in=0, bcc_to_email_outn=0, during_business=1, weekday=1, email_length=1000, attachment=3)
 
   tsfv_obj.insert_email(week=1, _id=69, to_email_in=10, to_email_outn=5, cc_to_email_in=0, cc_to_email_outn=15, bcc_to_email_in=15, bcc_to_email_outn=15, during_business=0, weekday=14, email_length=1000, attachment=12)
@@ -205,7 +218,10 @@ def mini_test():
   tsfv_obj.insert_email(week=3, _id=100, to_email_in=11, to_email_outn=20, cc_to_email_in=0, cc_to_email_outn=11, bcc_to_email_in=15, bcc_to_email_outn=15, during_business=0, weekday=9, email_length=1, attachment=1)
 
   tsfv_obj.finish()
-  pdb.set_trace()
+  tsfv_obj.collapse()
+  exit(-1) # TODO: Premature exit
+
+
   tsfv_obj.normalize()
   print tsfv_obj
   fn =  "rando.cPickle"
