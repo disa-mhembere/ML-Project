@@ -56,8 +56,11 @@ def write_small_dict( tsfvName, writeFile ):
   filename = open(writeFile, 'wb')
 
   # Iterating over hte TSFV data structure
+  for i in tsfv.iteritems():
 
-  for i in tsfv.data.iteritems():
+    if np.count_nonzero(i[1] > 0):
+      filename.write( "{} ".format( i[0] ) )
+
     for idx,value in enumerate (i[1]):
 
       if ( value!=0.0) :
@@ -67,7 +70,7 @@ def write_small_dict( tsfvName, writeFile ):
         filename.write( "{}:{} ".format( idx+1, str(preciseValue) ) )
 
     if ( flag ):
-        filaname.write('\n')
+        filename.write('\n')
     flag = False
 
 def main():
@@ -81,9 +84,8 @@ def main():
   parser.add_argument("read_file", action="store", help="File Name to read from")
   parser.add_argument("write_file", action="store", help="File Name to write to")
   parser.add_argument("--small", "-s",action="store_true", help="Write small dict (collapsed TSFV)")
-
   result = parser.parse_args()
-
+  result.small = True
   if result.small:
     write_small_dict( result.read_file, result.write_file )
 
