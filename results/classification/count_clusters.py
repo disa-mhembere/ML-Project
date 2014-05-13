@@ -4,7 +4,6 @@ def pprint(d):
   for key in d.keys():
     print key, d[key]
 
-def 
 if len(sys.argv) < 2:
   sys.stderr.write("usage: count_clusters.py cluster_filename")
   exit(-1)

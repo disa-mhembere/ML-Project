@@ -41,6 +41,9 @@ public class WeightedKNN extends Predictor
 	  // Iterating over the instance list and update the HashMap
 	  for (int i=0; i<this.instances.size(); i++){
 		  
+		  if( i==instanceIndex)
+			  continue;
+		  
 		  Label clusterId = this.instances.get(i).getLabel();
 		  
 		  double clusterWeight = 1 / distanceMatrix.get(i).get(instanceIndex);

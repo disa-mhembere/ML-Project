@@ -29,7 +29,7 @@ public class Printer
 	  PrintWriter writer = new PrintWriter(cluster_output, "UTF-8");
 	  Collections.sort(l, new InstanceComparator() );
 	  for (Instance i: l){
-		  writer.println(i.getLabel().toString() + "," + i.get_orginalLabel().toString());
+		  writer.println(i.getLabel().toString() + " , " + i.get_orginalLabel().toString());
 	  }
 	  writer.close();
   }
