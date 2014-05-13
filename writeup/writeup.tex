@@ -4,6 +4,8 @@
 \usepackage{paralist}
 \usepackage{times}
 \usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{subfigure}
 \setlength\titlebox{6.5cm}    % Expanding the titlebox
 
 \mathchardef\mhyp="2D
@@ -272,12 +274,14 @@ number of these switches are noted as anomalous time periods.
 
 \section{Results}
 
-\begin{tabular}{cc}
-  \num\putindeepbox[7pt]{\includegraphics{img200inv.pdf}}
-  & \num\putindeepbox[7pt]{\includegraphics{img800inv.pdf}} \\
-  \num\putindeepbox[7pt]{\includegraphics{img2000inv.pdf}}
-  & \num\putindeepbox[7pt]{\includegraphics{img4000inv.pdf}} \\
-\end{tabular}
+\begin{figure}
+  \centering
+  \subfigure[Title A]{\includegraphics[width=3cm]{img200inv.pdf}}\hfill
+  \subfigure[Title B]{\includegraphics[width=3cm]{img800inv.pdf}}\hfill
+  \subfigure[Title C]{\includegraphics[width=3cm]{img2000inv.pdf}}\hfill
+  \subfigure[Title D]{\includegraphics[width=3cm]{img4000inv.pdf}}\hfill
+  \caption{Title for both}
+\end{figure}
 
 - Run with no invariants \\
 
