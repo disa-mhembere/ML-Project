@@ -39,12 +39,12 @@ The use of glocal multivariate graph statistics \cite{mhembere2013computing} as
 a supplementary source of multi-dimensional features for anomalous network detection,
 has not been explored \textit{to our knowledge}. Such statistics can expose 
 otherwise-latent topological attributes within networks that have the potential 
-to improve anomalous activity detection within a network.
+to improve abnormality detection within a network.
 
-We use of such statistics to generate novel features for use within
+We use such statistics to generate novel features for use within
 classification tasks for the Enron corpus of emails \cite{enronrepo2009}.
 We hope to show that the use of such statistics can help to identify periods of
-anomalous activity and associated actors.
+anomalous activity and those associated actors.
 \end{abstract}
 
 
@@ -53,15 +53,15 @@ anomalous activity and associated actors.
 Detecting anomalies in order to expose malicious activity in networks is an
 established problem within network security \cite{roesch1999snort,zhang2000intrusion}.
 This problem is further exacerbated when one lacks data that constitutes what non-malicious
-activity is represented as within a specific network topology. This is the problem
+activity is represented as, within a specific network topology. This is the problem
 we face when attempting to analyze the Enron email corpus. 
 
 % Importance
 Autonomous determination of network abnormality in addition to it source(s) is paramount
-to many industries, including most notedly, the finance industry.
+to many industries, including most notably, the finance industry.
 Failure to monitor and detect such anomalies can lead to catastrophic financial
 consequences for individuals and companies alike as demonstrated by the financial 
-crisis of 2008 \cite{grigor2009financial}. A preventative measure it do develop automated tools
+crisis of 2008 \cite{grigor2009financial}. A preventative measure is to develop automated tools
 to determine when anomalous activity occurs within organizations and take action before
 catastrophes occur. This work is a step toward developing such technologies.
 
@@ -90,15 +90,15 @@ statistics which encode both local and global graph topological information. Thi
 supplementary data can then be used to assist in classifying natively non-linear data.
 This may have an analogous effect to the kernel trick used in non-linear 
 classification in SVMs. %limitations
-We do should note that the computational cost of deriving a graph, given the
+We should note that the computational cost of deriving a graph, given the
 raw communication data, in addition to computing glocal graph statistics, may
 be non-trial. As such, one might have to tradeoff such costs vs the number of graph
 statistics computed.
 
 \section{Background and Related Works}
 In the early 2000's Chan et al \cite{chan2003machine} suggested non-bayesian 
-learning algorithms that successfully avoided the zero-frequency problem when determining
-anomalous network activity given no samples. They propose the Learning rules for Anomaly
+learning algorithms that successfully avoided the zero-frequency problem i.e., determining
+anomalous network activity given no prior samples. They propose the Learning rules for Anomaly
 Detection (LERAD), a random sampling-based algorithm that attempts to learn anomaly
 rules by bipartition feature-vectors and computing the probability of one feature set
 partition to the other. The major drawback of this algorithm is the assumption that the 
@@ -109,18 +109,18 @@ Chan et al \cite{chan2003machine} also developed Clustering for Anomaly Detectio
 On paper, this algorithm suits the type of classification we aim to do well. It is
 essentially a variant of K-Nearest Neighbors, but has a more flexible parameter than K
 for deciding the neighborhood that ultimately determines a samples label. By using a 
-cluster width parameter, CLAD has the effect of flexible, per sample K parameter.
+cluster width parameter, CLAD behaves like a flexible, per sample, K parameter, KNN.
 
 Shon et al \cite{shon2007hybrid} proposed an unsupervised variant of the SVM, termed
-the \textit{Enhanced SVM}. It reduced the false-positive rate and furthermore no longer required 
+the \textit{Enhanced SVM}. It reduces the false-positive rate and furthermore no longer required 
 training data, as its characteristics resemble that of a one-class SVM. This method appears
 reasonable, but is most effective with preprocessed data. The authors actually use 4 stages of
-preprocessing and training before they run the actual SVM. This is an option not always available
-to some, like ourselves.
+preprocessing and training before they run the actual SVM. This is an option that is 
+not always available to some, like ourselves.
 
 Others \cite{eskin2000anomaly} have attempted to model anomalies (and normal activity)
 in sample data as a gaussian mixture(GMM) model. Here detection is simply a classifier that
-discriminates on whether a sample could be generated by the GMM distribution.
+discriminates on whether a sample could be generated by the GMM distribution or not.
 This model unfortunately also assumes an initial portion of the data is anomaly free.
 Though the Enron corpus may generally be modeled with this assumption, we cannot
 determine whether this is truly accurate. There is a further persistent assumption
@@ -138,13 +138,13 @@ solve intrusion detection problems which are a near-equivalent class of problems
 \section{Design}
 This section describes our choice of glocal graph statistics and discusses their suitability
 to the task of detection of anomalous activity and anomalous actors in the Enron email corpus.
-We further discus our choice of Machine Learning algorithms. Lastly, we discuss our metrics
+We further discuss our choice of Machine Learning algorithms. Lastly, we discuss our metrics
 of success and evaluation for our implementations.
 
 \subsection{Graph Statistics} \label{graph_stats}
 Carey et al \cite{priebe2005scan} showed that through the use of the a glocal graph 
 statistic (namely the Scan statistic), one could successfully detect anomalous activity.
-We chose to look further and ask whether traditionally topologically-encoded graph statistics would
+We choose to look further and ask whether traditional topologically-encoded graph statistics would
 be even better suited to the task of classifying both periods of anomaly and those
 most highly associated with the anomaly.
 
@@ -152,7 +152,7 @@ For consistency, let $G$ be a graph, with vertex set $V$ and edges $u \sim v \in
 all $m$ edges). Let $e_{ij}$ be a directed edge from $v_i$ to $v_j$. Let $l(u,v)$ be the edge
 distance between vertices $u, v$. Let the $k$-hop \emph{neighborhood} of a graph $G$ around
 vertex $v$ be denoted by $N_k[v;G]$, where $N_k[v;G] = \{u \in V:l(u,v) \le k\}$. Let $\eta_i$ 
-denote the neighbors for $v_i$. Finally, let the $C\mhyp k$ denote the size of a clique as $k$, where a clique $C \subset V$ s.t $\forall v,u \in C\ \exists\ v \sim u$.
+denote the neighbors for $v_i$. Finally, let the $C\mhyp k$ denote the size of a clique as $k$, where a clique $C \subset V$ s.t $\forall\ v,u \in C\ \exists\ v \sim u$.
 
  
 As such we use the following statistics:
@@ -172,7 +172,7 @@ topology \cite{pao2011statistical}. All but Eigen-spectral decomposition provide
 connectivity and interaction information from one vertex to the next. These will
 logically be the most informative in our case since we hypothesize there is a strong
 correlation between topological non-homogeneity within graphs and anomalous/malicious
-activity. The spectral decomposition actually produces a compressed relationship mapping
+activity. The spectral decomposition actually produces a condensed relationship mapping
 between each pair of vertices in the graph. As such, it follows that this is an obvious
 candidate for determining when atypical patterns occur in the graph.
 
@@ -191,11 +191,11 @@ $d = \sqrt{\sum\limits_{i=1}^N s_i (x_i = x_i')^2 }$
 The other aim is to deterrine \textit{who} were those who caused the anomalous
 activity during these periods of unrest. Literature \cite{shon2007hybrid,shon2005machine}
 leads us to believe that Support Vector Machines (SVM)s are a suitable from such 
-a classification task. 
+a classification task. *Unfortunately, time did not permit us to implement this.
 
 
 \section{Methods}
-In this section we describe both data acquisition phase and the learning algorithm
+In this section we describe both the data acquisition phase and the learning algorithm
 implementation and the challenges we faced in the pursuit of both.
 
 \subsection{Data Acquisition}
@@ -210,21 +210,29 @@ at Enron.
 \end{inparaenum}
 
 \subsubsection{Raw email Feature Extraction}
-We used the raw email data to derive $17$ frequency based features. The feature set
+We used the raw email data to derive $18$ frequency based features. The feature set
 included the following: 
-\begin{itemize}
+\begin{itemize} \itemsep0em
 \item Sent/Received emails (In network and out)
-%,  from_email_in, cc_to_email_in, bcc_to_email_in, mean_email_len,
-%  to_email_outn,  from_email_outn, cc_to_email_outn, bcc_to_email_outn,
-%  num_attachments, to_on_weekend, to_on_weekday, to_num_emails_dbh, to_num_emails_abh,
-%  from_num_emails_dhb, from_num_emails_abh, from_on_weekend, from_on_weekday, indegree,
-%  outdegree, scan1, triangle, transitivity, normed_eigenvalue
+\item Sent/Received CC emails (In network and out)
+\item Sent/Received BCC emails (In network and out)
+\item Sent/Received mean email length
+\item Sent/Received on weekday (Mon-Fri)  (In network and out)
+\item Sent/Received on weekend (Sat,Sun)  (In network and out)
+\item Sent/Received during business hours (8a.m - 6p.m) (In network and out)
+\item Sent/Received outside business hours (8a.m - 6p.m) (In network and out)
 \end{itemize}
+
+We define `in network' as emails sent from and to the same domain e.g 
+\texttt{sender@domainX.com} to \texttt{recepient@domainX.com}, and out of network'
+as emails sent from one domain to another that is not the same e.g \texttt{sender@domainX.com}
+to \texttt{recepient@domainY.com}.
+
 
 \subsubsection{Challenges: Raw email Feature Extraction}
 We faced several challenges while accumulating feature vectors:
-\begin{itemize}
-\item Several email addresses to a single user. We did not solve this issue as it is
+\begin{itemize} \itemsep0em
+\item Several email addresses link to a single user. We did not solve this issue as it is
 impossible determine a mapping of email addresses to names since a name is non-unque.
 \item Non-uniform email addresses generated in raw text. Due to \textit{smart} email clients
 some email addresses were given aliases in the form of nicknames. We did not attempt to
@@ -236,25 +244,54 @@ users. This is the case for \textit{Reminder} emails. We choose to ignore these.
 
 \subsubsection{Time Series Feature Extraction}
 We used the igraph \cite{igraph2006} package to generate the 6 glocal graph statistics
-described in section \ref{graph_stats}
+described in section \ref{graph_stats}. Note that the time series graphs only contained 
+$\sim$ 190 of the most influential Enron employees, whereas the feature vectors we produced
+for classification include all senders and recipients inside and outside Enron who totaled $86,857$.
+We write the feature vector instances in batches of weeks to match the time series graphs.
+This means the same user is potentially represented up to once for each week of emails sent.
 
-\subsubsection{Challenges: Feature Extraction}
-Todo
 \subsubsection{Regularization}
-Todo
+In order ensure no single features raw magnitude dictated the classification task we performed
+regularization by ensuring the standard deviation of the every feature vector was equal to 1.
+We achieved this via the sci-kit learn \cite{scikit-learn} library.
 
 \section{Experiment Design}
-Todo
+
+\hspace*{10pt}\textit{Anomalous actors:} \\
+We first run the distance Weighted KNN on instances with no graphs statistics, then we
+repeat the experiment on instances that do contain graph statistics. We do this to gauge
+the improvement in classification.
+
+We previously accumulated a list of Enron employees convicted and now manually determine
+whether these individuals are clustered together.
+	
+\hspace*{10pt}\textit{Anomalous time periods:} \\
+**NOT DONE: Since we store the feature-vector instances by the week we are able to note when one individual
+moves from a \textit{normal} cluster to an \textit{anomalous} one. Weeks with the highest
+number of these switches are noted as anomalous time periods.
+
 \section{Results}
-Todo
+- Run with no invariants \\
+
+- Run with invariants \\
+
+- Number of switches per week \\
+
+
+No computational time to classify time periods
+
+Analysis of the results: \\
+
+Reasons for ineffectiveness: \\
+
+- Features may not match what we want to cluster for \\
+- Sparse \\ 
+- Very expensive to train wKNN and more complex classifiers e.g SVM \\
 
 \section{Comparison to proposal}
-We did achieve all we set out to accomplish!
-
-\section{Conclusion}
-Todo
-
-
+We achieved most of what we set out accomplish! Time did not permit the implementation of
+a one-class SVM to classify time periods of anomaly, but can infer this information from
+the weighted KNN results.
 
 \section*{Bibliography}
 \bibliographystyle{ieeetr}
