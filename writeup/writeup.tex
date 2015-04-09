@@ -267,52 +267,44 @@ the improvement in classification.
 We previously accumulated a list of Enron employees convicted and now manually determine
 whether these individuals are clustered together.
 	
-\hspace*{10pt}\textit{Anomalous time periods:} \\
-**NOT DONE: Since we store the feature-vector instances by the week we are able to note when one individual
-moves from a \textit{normal} cluster to an \textit{anomalous} one. Weeks with the highest
-number of these switches are noted as anomalous time periods.
-
 \section{Results}
 
 \begin{figure}
   \centering
-  \subfigure[Additional 200]{\includegraphics[width=3cm]{img200inv.pdf}}\hfill
-  \subfigure[Additional 800]{\includegraphics[width=3cm]{img800inv.pdf}}\hfill
-  \subfigure[Additional 2000]{\includegraphics[width=3cm]{img2000inv.pdf}}\hfill
-  \subfigure[Additional 4000]{\includegraphics[width=3cm]{img4000inv.pdf}}\hfill
+  \subfigure[Additional 200]{\includegraphics[width=4cm]{img200inv.pdf}}\hfill
+  \subfigure[Additional 800]{\includegraphics[width=4cm]{img800inv.pdf}}\hfill
+  \subfigure[Additional 2000]{\includegraphics[width=4cm]{img2000inv.pdf}}\hfill
+  \subfigure[Additional 4000]{\includegraphics[width=4cm]{img4000inv.pdf}}\hfill
   \caption{With Graph Statistics}
 \end{figure}
 
 \begin{figure}
   \centering
-  \subfigure[Additional 200]{\includegraphics[width=3cm]{img200noninv.pdf}}\hfill
-  \subfigure[Additional 800]{\includegraphics[width=3cm]{img800noninv.pdf}}\hfill
-  \subfigure[Additional 2000]{\includegraphics[width=3cm]{img2000noninv.pdf}}\hfill
-  \subfigure[Additional 4000]{\includegraphics[width=3cm]{img4000noninv.pdf}}\hfill
+  \subfigure[Additional 200]{\includegraphics[width=3.9cm]{img200noninv.pdf}}\hfill
+  \subfigure[Additional 800]{\includegraphics[width=3.9cm]{img800noninv.pdf}}\hfill
+  \subfigure[Additional 2000]{\includegraphics[width=3.9cm]{img2000noninv.pdf}}\hfill
+  \subfigure[Additional 4000]{\includegraphics[width=3.9cm]{img4000noninv.pdf}}\hfill
   \caption{Without Graph Statistics}
 \end{figure}
 
-- Run with no invariants \\
+\begin{figure} \label{errstat}
+ \centering \resizebox{0.5\textwidth}{!}{\includegraphics{ErrorStats.pdf}}
+ \caption{Comparison of wKNN classification with and without graph statistics}
+\end{figure}
 
-- Run with invariants \\
+As Figure \ref{errstat} shows we were able to see up to $\sim36\%$ percent improvement in our ability to 
+cluster the individuals using these supplementary features. This demonstrates our theories were justified.
+We successfully identified those individuals engaging in fraudulent activity as noted in the media.
 
-- Number of switches per week \\
+Unfortunately we were not able to classify time periods as we had initially intended due to time computational constraints as we needed to 
 
-
-No computational time to classify time periods
-
-Analysis of the results: \\
-
-Reasons for ineffectiveness: \\
-
-- Features may not match what we want to cluster for \\
-- Sparse \\ 
-- Very expensive to train wKNN and more complex classifiers e.g SVM \\
+As a caveat, this method may have some limitations since we arbitrarily selected which features to extract from the raw data. The features one selects may not match what he/she intends to cluster for. Furthermore, wKNN has
+an upper bound on complexity of $O(n^2)$ which proved very expensive in our case (possibly 90 Billion operations).
 
 \section{Comparison to proposal}
 We achieved most of what we set out accomplish! Time did not permit the implementation of
-a one-class SVM to classify time periods of anomaly, but can infer this information from
-the weighted KNN results.
+a one-class SVM to classify time periods of anomaly. We did show that we could identify those
+engaging in anomalous activity.
 
 \section*{Bibliography}
 \bibliographystyle{ieeetr}
